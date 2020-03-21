@@ -1,12 +1,16 @@
+var gameboard;
+let x = 0;
+let y = 0;
+
 function setup() {
-    createCanvas(400, 400);
+    createCanvas(1000, 1000);
+    gameboard = new Gameboard();
+    // gameboard_img = gameboard.gameboard_img;
+
   }
   
   function draw() {
-    background(0);
-    fill(155);
-    square(100,100,100);
-    
-    fill(20,30,100);
-    square(10,10,50);
+    image(gameboard.gameboard_img,20,20);
+    square(200,190,32);
+
   }
