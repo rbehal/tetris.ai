@@ -19,9 +19,6 @@ imgP = loadImage("assets/pink_sq.png", img => {
 imgPU = loadImage("assets/purple_sq.png", img => {
   img.resize(32, 32);
 });
-imgY = loadImage("assets/yellow_sq.png", img => {
-  img.resize(32, 32);
-});
 GameBoard = loadImage("assets/TetrisBoard.png");
 
 function draw() {
@@ -30,4 +27,5 @@ function draw() {
 
   fill(20, 30, 100);
   square(10, 10, 50);
+  Square();
 }
