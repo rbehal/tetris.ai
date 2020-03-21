@@ -12,6 +12,7 @@ let orange_sq;
 let pink_sq;
 let purple_sq;
 let yellow_sq;
+let rand_shape = 0;
 
 
 function setup() {
@@ -19,18 +20,13 @@ function setup() {
     preloadImages(); 
     createCanvas(650, 750);
     gameboard = new Gameboard();
-    zoomby = new Shapes(); 
-    zoomby.spawnSquare(); 
   }
   
   function draw() {
     background(0);
     image(gameboard.gameboard_img,20,20);
     
-    if (gameboard.activeShape.shape == false) {
-      square = new Shapes();
-      square.spawnSquare();
-    }
+    randomShape();
  
     gameboard.display();
 
@@ -69,6 +65,35 @@ function setup() {
     } 
     if (keyCode === DOWN_ARROW) {
       y++;
+    }
+  }
+
+  function randomShape() {
+    if (gameboard.activeShape.shape == false) {
+      rand_shape = Math.round(Math.random() * 6);
+      zoomby = new Shapes();
+      if (rand_shape == 0) {
+        zoomby.spawnSquare();
+        rand_shape++; 
+      } else if (rand_shape == 1) {
+        zoomby.spawnJ();
+        rand_shape++;
+      } else if (rand_shape == 2) {
+        zoomby.spawnL();
+        rand_shape++;
+      } else if (rand_shape == 3) {
+        zoomby.spawnZ();
+        rand_shape++;
+      } else if (rand_shape == 4) {
+        zoomby.spawnS();
+        rand_shape++;
+      } else if (rand_shape == 5) {
+        zoomby.spawnT();
+        rand_shape++;
+      } else if (rand_shape == 6) {
+        zoomby.spawnLine();
+        rand_shape++;
+      }
     }
   }
 

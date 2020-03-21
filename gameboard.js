@@ -23,15 +23,16 @@ class Gameboard {
         // Current blocks on the board coordinates
         this.pieces = [];
 
-        // Active shape
-        this.activeShape; 
+        // Active shapes
+        let placeHolder = new Shapes(); 
+        placeHolder.shape = false; 
+        this.activeShape = placeHolder; 
     }
 
     addShape(shape) {
         for (var i = 0;i<shape.blocks.length;i++) {
             let curr_block = shape.blocks[i]; 
             if (this.gameboard[curr_block.position[0]][curr_block.position[1]] != null) {  // Maybe I don't need this if?
-                console.log("I ran.")
                 return false; 
             } else {
                 curr_block.x = curr_block.position[0]*32 + this.initial[0];
@@ -56,8 +57,6 @@ class Gameboard {
     shift() { // Could try sorting indices array by y value, should wokr
         let indices_to_move = []; 
 
-
-
         for (let i = 0;i<this.activeShape.blocks.length;i++) {
             let curr_block = this.activeShape.blocks[i];
             let x_cord = curr_block.position[0];
@@ -70,8 +69,6 @@ class Gameboard {
                 return;
             }
         }
-
-
 
         indices_to_move = indices_to_move.reverse(); 
 
