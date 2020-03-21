@@ -9,6 +9,8 @@ class Block {
       this.static = false; 
     }
 
-   
+    copy() {
+      return new Block([this.position[0], this.position[1]], this.srcImg);
+    }
   }
   

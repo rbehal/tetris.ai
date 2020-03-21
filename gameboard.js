@@ -32,7 +32,7 @@ class Gameboard {
     addShape(shape) {
         for (var i = 0;i<shape.blocks.length;i++) {
             let curr_block = shape.blocks[i]; 
-            if (this.gameboard[curr_block.position[0]][curr_block.position[1]] != null) {  // Maybe I don't need this if?
+            if (this.gameboard[curr_block.position[0]][curr_block.position[1]] != null) {  
                 return false; 
             } else {
                 curr_block.x = curr_block.position[0]*32 + this.initial[0];
@@ -54,20 +54,12 @@ class Gameboard {
         }
     }
 
-    shift() { // Could try sorting indices array by y value, should wokr
+    shift(blocks) { // Blocks are block objects with new positions -- Should be checked with checkMove already.
         let indices_to_move = []; 
 
-        for (let i = 0;i<this.activeShape.blocks.length;i++) {
-            let curr_block = this.activeShape.blocks[i];
-            let x_cord = curr_block.position[0];
-            let y_cord = curr_block.position[1];
-            let curr_piece = this.gameboard[x_cord][y_cord];
-            if((this.gameboard[x_cord][y_cord+1] == null || this.gameboard[x_cord][y_cord+1].static == false) && curr_piece.static == false && y_cord != 19) {                
-                indices_to_move.push(this.pieces.indexOf(curr_block.position));
-            } else {
-                this.activeShape.stopDrop(); 
-                return;
-            }
+        for (let i = 0;i<this.activeShape.blocks.length;i++) {  
+            let curr_block = this.activeShape.blocks[i];            
+            indices_to_move.push(this.pieces.indexOf(curr_block.position));
         }
 
         indices_to_move = indices_to_move.reverse(); 
@@ -78,15 +70,79 @@ class Gameboard {
             let x_cord = this.pieces[index][0];
             let y_cord = this.pieces[index][1];
 
-            this.pieces.splice(index, 1); 
             this.gameboard[x_cord][y_cord] = null;
+            this.pieces.splice(index, 1); 
         }
 
-        for (let i =0;i<this.activeShape.blocks.length;i++) {
-            let curr_block = this.activeShape.blocks[i]; 
-            curr_block.position = [curr_block.position[0], curr_block.position[1] + 1]; 
-        }
+        this.activeShape.blocks = blocks;
 
         this.addShape(this.activeShape);
     }
+
+    checkMove(blocks) {
+        for (var i = 0;i<blocks.length;i++) {
+            let curr_block = blocks[i]; 
+            let x_cord = curr_block.position[0];
+            let y_cord = curr_block.position[1];
+
+            if (!(y_cord <= 19 && x_cord >= 0 && x_cord <= 9)) { // Separate to prevent NullPointerException
+                return false;
+            }
+
+            if (!((this.gameboard[x_cord][y_cord] == null || this.gameboard[x_cord][y_cord].static == false) && curr_block.static == false)) {  
+                return false; 
+            }
+        }
+        return true;
+    }
+ 
+    moveDown() {
+        let proposed_blocks = this.activeShape.copyBlocks(); 
+
+        for (var i = 0;i<proposed_blocks.length;i++) {
+            let candidate = proposed_blocks[i]; 
+            candidate.position[1]++;
+        }
+
+        if(!this.checkMove(proposed_blocks)) {
+            this.activeShape.stopDrop(); 
+            return false;
+        } else {
+            this.shift(proposed_blocks);
+            return true;
+        }
+    }
+
+    moveRight() {
+        let proposed_blocks = this.activeShape.copyBlocks(); 
+
+        for (var i = 0;i<proposed_blocks.length;i++) {
+            let candidate = proposed_blocks[i]; 
+            candidate.position[0]++;
+        }
+
+        if(this.checkMove(proposed_blocks)) {
+            this.shift(proposed_blocks);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    moveLeft() {
+        let proposed_blocks = this.activeShape.copyBlocks(); 
+
+        for (var i = 0;i<proposed_blocks.length;i++) {
+            let candidate = proposed_blocks[i]; 
+            candidate.position[0]--;
+        }
+
+        if(this.checkMove(proposed_blocks)) {
+            this.shift(proposed_blocks);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }

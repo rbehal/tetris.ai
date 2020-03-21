@@ -42,7 +42,8 @@ function setup() {
     if (frames == 60) {
       seconds++;
       frames = 0;
-      this.gameboard.shift();
+      // this.gameboard.shift();
+      this.gameboard.moveDown();
     }
     fill(255);
     text(seconds.toString(), width/2 - 5, 60);
@@ -50,21 +51,19 @@ function setup() {
   }
  
   function mouseClicked() { // For testing
-    this.gameboard.shift();
+    // this.gameboard.moveDown();
+    this.gameboard.moveRight();
   }
 
   function keyPressed() {
     if (keyCode === LEFT_ARROW) {
-      x--;
+      gameboard.moveLeft();
     } 
     if (keyCode === RIGHT_ARROW) {
-      x++;
-    } 
-    if (keyCode === UP_ARROW && y > 0) {
-      y--;
+      gameboard.moveRight();
     } 
     if (keyCode === DOWN_ARROW) {
-      y++;
+      gameboard.moveDown();
     }
   }
 
