@@ -7,7 +7,7 @@ class Gameboard {
         this.speed = 1; 
 
         // x and y of the top left corner
-        this.initial = [147,77];
+        this.initial = [145,73];
 
         // Initializing gameboard array
         this.gameboard = []; 
@@ -20,7 +20,8 @@ class Gameboard {
             temp = []; 
         } 
 
-        console.log(this.gameboard[0].length);
+        // Active piece coordinates
+        this.pieces = [];
     }
 
     addSquare(square, position) {
@@ -29,18 +30,32 @@ class Gameboard {
         } else {
             square.x = position[0]*32 + this.initial[0];
             square.y = position[1]*32 + this.initial[1];
+
             this.gameboard[position[0]][position[1]] = square; 
+            this.pieces.push(position); 
         }
     }
 
     display() {
-        for (let i = 0;i<this.gameboard.length;i++) {
-            for (let j = 0;j<this.gameboard[i].length;j++) {
-                if (this.gameboard[i][j] != null) {
-                    if (this.gameboard[i][j].shape == null) {
-                        image(this.gameboard[i][j].srcImg, this.gameboard[i][j].x, this.gameboard[i][j].y)
-                    }
-                }
+        for (let i = 0;i<this.pieces.length;i++) {
+            let x_cord = this.pieces[i][0];
+            let y_cord = this.pieces[i][1];
+            let curr_piece = this.gameboard[x_cord][y_cord];
+            image(curr_piece.srcImg, curr_piece.x, curr_piece.y)
+        }
+    }
+
+    shift() {
+        for (let i = 0;i<this.pieces.length;i++) {
+            let x_cord = this.pieces[i][0];
+            let y_cord = this.pieces[i][1];
+            let curr_piece = this.gameboard[x_cord][y_cord];
+            if(this.gameboard[x_cord][y_cord+1] == null && curr_piece.static == false && y_cord != 19) {                
+                this.pieces.splice(i, 1); 
+                this.gameboard[x_cord][y_cord] = null;
+                this.addSquare(curr_piece, [x_cord, y_cord+1]);
+            } else {
+                curr_piece.static = true; 
             }
         }
     }

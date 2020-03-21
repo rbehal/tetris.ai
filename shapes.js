@@ -8,6 +8,7 @@ class Shapes {
     this.y = 32;
 
     this.shape = null;
+    this.static = false; 
   }
   display() {}
 }
