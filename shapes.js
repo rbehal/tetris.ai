@@ -1,12 +1,12 @@
 class Shapes {
   constructor() {
-    // Must order bottom to top
     this.blocks = [];
     this.shape = true;
+    this.status = 0; 
   }
 
   spawnSquare() {
-    this.blocks = [new Block([4,1], yellow_sq), new Block([5,1], yellow_sq), new Block([4,0], yellow_sq), new Block([5,0], yellow_sq)];
+    this.blocks = [new Block([4,0], yellow_sq), new Block([5,0], yellow_sq),new Block([4,1], yellow_sq), new Block([5,1], yellow_sq)];
     
     if(gameboard.checkMove(this.blocks)) {
       gameboard.addShape(this);
