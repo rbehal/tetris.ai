@@ -42,8 +42,7 @@ function setup() {
     if (frames == 60) {
       seconds++;
       frames = 0;
-      // this.gameboard.shift();
-      // this.gameboard.moveDown();
+      this.gameboard.moveDown();
     }
     fill(255);
     text(seconds.toString(), width/2 - 5, 60);
@@ -53,7 +52,7 @@ function setup() {
   function mouseClicked() { // For testing
     // this.gameboard.moveDown();
     // this.gameboard.moveRight();
-    this.gameboard.rotate(this.gameboard.activeShape);
+    gameboard.rotate(gameboard.activeShape);
   }
 
   function keyPressed() {
@@ -66,12 +65,14 @@ function setup() {
     if (keyCode === DOWN_ARROW) {
       gameboard.moveDown();
     }
+    if (keyCode === UP_ARROW) {
+      gameboard.rotate(gameboard.activeShape);
+    }
   }
 
   function randomShape() {
     if (gameboard.activeShape.shape == false) {
-      // rand_shape = Math.round(Math.random() * 6);
-      rand_shape = 3;
+      rand_shape = Math.round(Math.random() * 6);
       zoomby = new Shapes();
       if (rand_shape == 0) {
         zoomby.spawnSquare();
