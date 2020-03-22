@@ -218,6 +218,45 @@ class Gameboard {
         }
 
 
+        if (shape.blocks[0].srcImg == orange_sq) { // L block rotation
+            if (shape.status == 0) {
+                proposed_blocks[0].position = [proposed_blocks[0].position[0] + 1, proposed_blocks[0].position[1] - 2];
+                proposed_blocks[1].position = [proposed_blocks[1].position[0], proposed_blocks[1].position[1] - 1];
+                proposed_blocks[2].position = [proposed_blocks[2].position[0] - 1, proposed_blocks[2].position[1]];
+                proposed_blocks[3].position = [proposed_blocks[3].position[0], proposed_blocks[3].position[1] + 1];
+                if (this.makeMove(proposed_blocks)) {
+                    shape.status++;
+                    return true;
+                }
+            } else if (shape.status == 1) {
+                proposed_blocks[0].position = [proposed_blocks[0].position[0] + 1, proposed_blocks[0].position[1] + 1];
+                proposed_blocks[2].position = [proposed_blocks[2].position[0] - 1, proposed_blocks[2].position[1] - 1];
+                proposed_blocks[3].position = [proposed_blocks[3].position[0] - 2, proposed_blocks[3].position[1]];
+                if (this.makeMove(proposed_blocks)) {
+                    shape.status++;
+                    return true;
+                } 
+            } else if (shape.status == 2) {
+                proposed_blocks[0].position = [proposed_blocks[0].position[0] - 1, proposed_blocks[0].position[1] + 1];
+                proposed_blocks[2].position = [proposed_blocks[2].position[0] + 1, proposed_blocks[2].position[1] - 1];
+                proposed_blocks[3].position = [proposed_blocks[3].position[0], proposed_blocks[3].position[1] - 2];
+                if (this.makeMove(proposed_blocks)) {
+                    shape.status++;
+                    return true;
+                }
+            } else if (shape.status == 3) {
+                proposed_blocks[0].position = [proposed_blocks[0].position[0] - 1, proposed_blocks[0].position[1]];
+                proposed_blocks[1].position = [proposed_blocks[1].position[0], proposed_blocks[1].position[1] + 1];
+                proposed_blocks[2].position = [proposed_blocks[2].position[0] + 1, proposed_blocks[2].position[1] + 2];
+                proposed_blocks[3].position = [proposed_blocks[3].position[0] + 2, proposed_blocks[3].position[1] + 1];
+                if (this.makeMove(proposed_blocks)) {
+                    shape.status = 0;
+                    return true;
+                }
+            }
+        }
+
+
 
     }
 
