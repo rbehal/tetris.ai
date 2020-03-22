@@ -71,7 +71,7 @@ function setup() {
   function randomShape() {
     if (gameboard.activeShape.shape == false) {
       // rand_shape = Math.round(Math.random() * 6);
-      rand_shape = 4;
+      rand_shape = 3;
       zoomby = new Shapes();
       if (rand_shape == 0) {
         zoomby.spawnSquare();

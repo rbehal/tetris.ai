@@ -39,7 +39,7 @@ class Shapes {
   }
 
   spawnZ() {
-    this.blocks = [new Block([5,1],pink_sq), new Block([4,1],pink_sq), new Block([4,0],pink_sq), new Block([3,0],pink_sq)];
+    this.blocks = [new Block([3,0],pink_sq), new Block([4,0],pink_sq), new Block([4,1],pink_sq), new Block([5,1],pink_sq)];
     
     if(gameboard.checkMove(this.blocks)) {
       gameboard.addShape(this);
