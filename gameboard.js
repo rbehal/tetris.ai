@@ -85,7 +85,7 @@ class Gameboard {
             let x_cord = curr_block.position[0];
             let y_cord = curr_block.position[1];
 
-            if (!(y_cord <= 19 && x_cord >= 0 && x_cord <= 9)) { // Separate to prevent NullPointerException
+            if (!(y_cord >= 0 && y_cord <= 19 && x_cord >= 0 && x_cord <= 9)) { // Separate to prevent NullPointerException
                 return false;
             }
 

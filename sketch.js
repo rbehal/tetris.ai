@@ -68,6 +68,12 @@ function setup() {
     if (keyCode === UP_ARROW) {
       gameboard.rotate(gameboard.activeShape);
     }
+    if (keyCode == 32) { // ASCII for spacebar
+      let swtch = true;
+      while (swtch) {
+        swtch = gameboard.moveDown();
+      }
+    }
   }
 
   function randomShape() {
