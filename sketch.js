@@ -52,7 +52,8 @@ function draw() {
 function mouseClicked() { // For testing
   // this.gameboard.moveDown();
   // this.gameboard.moveRight();
-  gameboard.rotate(gameboard.activeShape);
+  // gameboard.rotate(gameboard.activeShape);
+  gameboard.clearLine();
 }
 
 function keyPressed() {

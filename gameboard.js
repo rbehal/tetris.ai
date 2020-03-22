@@ -393,4 +393,45 @@ class Gameboard {
         }
     }
 
+    clearLine() {
+        let row_status = {}; 
+        let full_lines = [];
+
+        this.pieces.forEach(function(position) { // Counts the number of blocks in each row.
+            let curr_row = position[1]; 
+            row_status[curr_row] = (row_status[curr_row] || 0) + 1;
+        });
+
+        Object.entries(row_status).forEach(function (row) { // Finds the lines that are full
+            if (row[1] == 10) {
+                full_lines.push(parseInt(row[0]));
+            }
+        });
+
+        for (var i=0;i<full_lines.length;i++) {
+            let full_row = full_lines[i];
+            for (var j=0;j<this.gameboard.length;j++)
+            {
+                let curr_block = this.gameboard[j][full_row];
+                if (curr_block.static == false) {
+                    break; 
+                } else {
+                    if (curr_block.position[0] == 9) {
+                        this.deleteLine(full_row); 
+                    }
+                }
+            }
+        }    
+    }
+
+    deleteLine(full_row) { // Should never be called directly -- only in clearLine()
+        for (var i=0;i<this.gameboard.length;i++)
+        {
+            let curr_block = this.gameboard[i][full_row];
+
+            this.pieces.splice(this.pieces.indexOf(curr_block.position), 1);
+            this.gameboard[i][full_row] = null;
+        }
+    }
+
 }
