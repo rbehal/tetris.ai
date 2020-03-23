@@ -80,7 +80,7 @@ function keyPressed() {
 
 function randomShape() {
   if (gameboard.activeShape.shape == false) {
-    rand_shape = Math.round(Math.random() * 6);
+    rand_shape = Math.floor(Math.random() * 8);
     // rand_shape = 6;
     zoomby = new Shapes();
     if (rand_shape == 0) {
@@ -104,6 +104,8 @@ function randomShape() {
     } else if (rand_shape == 6) {
       zoomby.spawnLine();
       rand_shape++;
+    } else if (rand_shape == 7) {
+      randomShape();
     }
   }
 }
