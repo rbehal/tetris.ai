@@ -53,7 +53,8 @@ function mouseClicked() { // For testing
   // this.gameboard.moveDown();
   // this.gameboard.moveRight();
   // gameboard.rotate(gameboard.activeShape);
-  gameboard.clearLine();
+  // gameboard.clearLine();
+  noLoop();
 }
 
 function keyPressed() {
@@ -80,6 +81,7 @@ function keyPressed() {
 function randomShape() {
   if (gameboard.activeShape.shape == false) {
     rand_shape = Math.round(Math.random() * 6);
+    // rand_shape = 6;
     zoomby = new Shapes();
     if (rand_shape == 0) {
       zoomby.spawnSquare();

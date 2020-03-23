@@ -54,7 +54,7 @@ class Gameboard {
         }
     }
 
-    shift(blocks) { // Blocks are block objects with new positions -- Should be checked with checkMove already.
+    shiftShape(blocks) { // Blocks are block objects with new positions -- Should be checked with checkMove already.
         let indices_to_move = [];
 
         for (let i = 0; i < this.activeShape.blocks.length; i++) {
@@ -108,7 +108,7 @@ class Gameboard {
             this.activeShape.stopDrop();
             return false;
         } else {
-            this.shift(proposed_blocks);
+            this.shiftShape(proposed_blocks);
             return true;
         }
     }
@@ -386,7 +386,7 @@ class Gameboard {
 
     makeMove(proposed_blocks) {
         if (this.checkMove(proposed_blocks)) {
-            this.shift(proposed_blocks);
+            this.shiftShape(proposed_blocks);
             return true;
         } else {
             return false;
@@ -394,11 +394,11 @@ class Gameboard {
     }
 
     clearLine() {
-        let row_status = {}; 
+        let row_status = {};
         let full_lines = [];
 
-        this.pieces.forEach(function(position) { // Counts the number of blocks in each row.
-            let curr_row = position[1]; 
+        this.pieces.forEach(function (position) { // Counts the number of blocks in each row.
+            let curr_row = position[1];
             row_status[curr_row] = (row_status[curr_row] || 0) + 1;
         });
 
@@ -408,30 +408,72 @@ class Gameboard {
             }
         });
 
-        for (var i=0;i<full_lines.length;i++) {
+        for (var i = 0; i < full_lines.length; i++) {
             let full_row = full_lines[i];
-            for (var j=0;j<this.gameboard.length;j++)
-            {
+            for (var j = 0; j < this.gameboard.length; j++) {
                 let curr_block = this.gameboard[j][full_row];
                 if (curr_block.static == false) {
-                    break; 
+                    break;
                 } else {
                     if (curr_block.position[0] == 9) {
-                        this.deleteLine(full_row); 
+                        this.deleteLine(full_row);
                     }
                 }
             }
-        }    
+        }
+
+        if (full_lines.length > 0) {
+            this.shiftBlocks(full_lines);
+        }
     }
 
     deleteLine(full_row) { // Should never be called directly -- only in clearLine()
-        for (var i=0;i<this.gameboard.length;i++)
-        {
+        for (var i = 0; i < this.gameboard.length; i++) {
             let curr_block = this.gameboard[i][full_row];
 
             this.pieces.splice(this.pieces.indexOf(curr_block.position), 1);
             this.gameboard[i][full_row] = null;
         }
+    }
+
+    shiftBlocks(full_lines) {
+        let shiftAmount = {};
+
+        for (var i = 19; i >= 0; i--) {
+            let count = 0;
+            for (var j = 0; j < full_lines.length; j++) {
+                if (full_lines[j] > i) {
+                    count++;
+                }
+            }
+            shiftAmount[i] = count;
+        }
+
+        console.log(Object.entries(shiftAmount));
+
+        for (let i = 19; i >= 0; i--) {
+            let change = Object.entries(shiftAmount)[i][1];
+            for (let j = 0; j < 10; j++) {
+                if (!full_lines.includes(i)) {
+                    let curr_block = this.gameboard[j][i];
+                    if (curr_block != null) {
+
+                        this.pieces.splice(this.pieces.indexOf(curr_block.position), 1);
+
+                        curr_block.position = [j, i + change];
+                        curr_block.x = curr_block.position[0] * 32 + this.initial[0];
+                        curr_block.y = curr_block.position[1] * 32 + this.initial[1];
+                                        
+                        this.pieces.push(curr_block.position);
+
+                        this.gameboard[j][i + change] = curr_block;
+                    } else {
+                        this.gameboard[j][i + change] = null;
+                    }
+                }
+            }
+        }
+
     }
 
 }

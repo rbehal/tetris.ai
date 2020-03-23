@@ -87,6 +87,7 @@ class Shapes {
       this.blocks[i].static = true;
     }
     this.shape = false;
+    gameboard.clearLine(); 
   }
 
   copyBlocks() {
