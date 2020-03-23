@@ -5,13 +5,14 @@ class Shapes {
     this.status = 0;
   }
 
-  spawnSquare() {
+  spawnBox() {
     this.blocks = [new Block([4, 0], yellow_sq), new Block([5, 0], yellow_sq), new Block([4, 1], yellow_sq), new Block([5, 1], yellow_sq)];
 
     if (gameboard.checkMove(this.blocks)) {
       gameboard.addShape(this);
       return true;
     } else {
+      noLoop();
       return false;
     }
   }
@@ -23,6 +24,7 @@ class Shapes {
       gameboard.addShape(this);
       return true;
     } else {
+      noLoop();
       return false;
     }
   }
@@ -34,6 +36,7 @@ class Shapes {
       gameboard.addShape(this);
       return true;
     } else {
+      noLoop();
       return false;
     }
   }
@@ -45,6 +48,7 @@ class Shapes {
       gameboard.addShape(this);
       return true;
     } else {
+      noLoop();
       return false;
     }
   }
@@ -56,6 +60,7 @@ class Shapes {
       gameboard.addShape(this);
       return true;
     } else {
+      noLoop();
       return false;
     }
   }
@@ -67,6 +72,7 @@ class Shapes {
       gameboard.addShape(this);
       return true;
     } else {
+      noLoop();
       return false;
     }
   }
@@ -78,6 +84,7 @@ class Shapes {
       gameboard.addShape(this);
       return true;
     } else {
+      noLoop();
       return false;
     }
   }

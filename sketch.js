@@ -1,15 +1,30 @@
 var gameboard;
 var activeShape;
-let seconds = 0;
-let frames = 0;
-let darkblue_sq;
-let green_sq;
-let lightblue_sq;
-let orange_sq;
-let pink_sq;
-let purple_sq;
-let yellow_sq;
-let rand_shapes = [];
+var seconds = 0;
+var frames = 0;
+var rand_shapes = [];
+
+var darkblue_sq;
+var green_sq;
+var lightblue_sq;
+var orange_sq;
+var pink_sq;
+var purple_sq;
+var yellow_sq;
+
+var T_img;
+var L_img;
+var J_img;
+var Z_img;
+var S_img;
+var Line_img;
+var Box_img;
+
+var hold = [];
+
+var x;
+var y;
+
 
 
 function setup() {
@@ -17,27 +32,37 @@ function setup() {
   preloadImages();
   createCanvas(650, 750);
   gameboard = new Gameboard();
+
+
+
+  for (let i = 0; i < 5; i++) {
+    rand_shapes.push(randomNumber());
+  }
+  console.log(rand_shapes);
 }
 
 function draw() {
-  background(0);
+  background(255);
+
+  x = mouseX;
+  y = mouseY;
+
+  imageMode(CORNER);
   image(gameboard.gameboard_img, 20, 20);
 
-  if (rand_shapes.length == 0) {
-    for (let i = 0;i < 4;i++) {
-      rand_shapes.push(Math.floor(Math.random() * 8));
-    }
-  } 
-
-  randomShape(rand_shapes.pop());
+  gameboard.displayNext();
+  if (hold.length != 0) {
+    image(hold[0], 75, 160);
+  }
+  // fill(255);
+  // text(mouseX.toString(),100,150);
+  // text (mouseY.toString(),100,175);
+  if (gameboard.activeShape.shape == false) {
+    randomShape(rand_shapes.shift());
+    rand_shapes.push(randomNumber());
+  }
 
   gameboard.display();
-
-  // Position of square based on mouse coords -- TESTING
-  // square(mouseX,mouseY,32);
-  // fill(255);
-  // text(mouseX.toString(), 100, 150);
-  // text(mouseY.toString(), 100, 175);
 
   // Timer stuff
   frames++;
@@ -56,7 +81,8 @@ function mouseClicked() { // For testing
   // this.gameboard.moveRight();
   // gameboard.rotate(gameboard.activeShape);
   // gameboard.clearLine();
-  noLoop();
+  // noLoop();
+  gameboard.deleteHold();
 }
 
 function keyPressed() {
@@ -78,36 +104,38 @@ function keyPressed() {
       swtch = gameboard.moveDown();
     }
   }
+  if (keyCode == 16) {
+    gameboard.hold();
+  }
+}
+
+function randomNumber() {
+  let rand_num = Math.floor(Math.random() * 8);
+  if (rand_num == 7) {
+    rand_num = randomNumber(); 
+    return rand_num;
+  } else {
+    return rand_num;
+  }
 }
 
 function randomShape(rand_shape) {
-  if (gameboard.activeShape.shape == false) {
-    activeShape = new Shapes();
-    if (rand_shape == 0) {
-      activeShape.spawnSquare();
-      rand_shape++;
-    } else if (rand_shape == 1) {
-      activeShape.spawnJ();
-      rand_shape++;
-    } else if (rand_shape == 2) {
-      activeShape.spawnL();
-      rand_shape++;
-    } else if (rand_shape == 3) {
-      activeShape.spawnZ();
-      rand_shape++;
-    } else if (rand_shape == 4) {
-      activeShape.spawnS();
-      rand_shape++;
-    } else if (rand_shape == 5) {
-      activeShape.spawnT();
-      rand_shape++;
-    } else if (rand_shape == 6) {
-      activeShape.spawnLine();
-      rand_shape++;
-    } else if (rand_shape == 7) {
-      randomShape(Math.floor(Math.random() * 8));
-    }
-  }
+  activeShape = new Shapes();
+  if (rand_shape == 0) {
+    activeShape.spawnBox();
+  } else if (rand_shape == 1) {
+    activeShape.spawnJ();
+  } else if (rand_shape == 2) {
+    activeShape.spawnL();
+  } else if (rand_shape == 3) {
+    activeShape.spawnZ();
+  } else if (rand_shape == 4) {
+    activeShape.spawnS();
+  } else if (rand_shape == 5) {
+    activeShape.spawnT();
+  } else if (rand_shape == 6) {
+    activeShape.spawnLine();
+  } 
 }
 
 function preloadImages() {
@@ -132,5 +160,15 @@ function preloadImages() {
   yellow_sq = loadImage("assets/yellow_sq.png", img => {
     img.resize(32, 32);
   });
+
+  T_img = loadImage("assets/T_piece.png");
+  Z_img= loadImage("assets/Z_piece.png");
+  S_img = loadImage("assets/S_piece.png");
+  L_img = loadImage("assets/L_piece.png");
+  J_img= loadImage("assets/J_piece.png");
+  Line_img = loadImage("assets/Line_piece.png");
+  Box_img = loadImage("assets/Box_piece.png");
 }
+
+
 
