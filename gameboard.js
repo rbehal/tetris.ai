@@ -1,7 +1,7 @@
 class Gameboard {
 
     constructor() {
-        this.gameboard_img = loadImage('TetrisBoard.png');
+        this.gameboard_img = loadImage('assets/TetrisBoard.png');
 
         this.level = 1;
         this.speed = 1;
@@ -50,6 +50,7 @@ class Gameboard {
             let x_cord = this.pieces[i][0];
             let y_cord = this.pieces[i][1];
             let curr_piece = this.gameboard[x_cord][y_cord];
+            imageMode(CORNER);
             image(curr_piece.srcImg, curr_piece.x, curr_piece.y)
         }
     }
@@ -449,8 +450,6 @@ class Gameboard {
             shiftAmount[i] = count;
         }
 
-        console.log(Object.entries(shiftAmount));
-
         for (let i = 19; i >= 0; i--) {
             let change = Object.entries(shiftAmount)[i][1];
             for (let j = 0; j < 10; j++) {
@@ -472,6 +471,106 @@ class Gameboard {
                     }
                 }
             }
+        }
+    }
+
+    displayNext() {
+        let next_shapes = [];
+
+        rand_shapes.forEach(function (shape) {
+            if (shape == 0) {
+                next_shapes.push(Box_img);
+            } else if (shape == 1) {
+                next_shapes.push(J_img);
+            } else if (shape == 2) {
+                next_shapes.push(L_img);
+            } else if (shape == 3) {
+                next_shapes.push(Z_img);
+            } else if (shape == 4) {
+                next_shapes.push(S_img);
+            } else if (shape == 5) {
+                next_shapes.push(T_img);
+            } else if (shape == 6) {
+                next_shapes.push(Line_img);
+            }
+        })
+
+        imageMode(CENTER);
+        // Constant resizing causes blurriness
+        next_shapes[0].resize(0, 45);
+        image(next_shapes[0], 560, 160);
+
+        next_shapes[1].resize(0, 40);
+        image(next_shapes[1], 560, 280);
+
+        next_shapes[2].resize(0, 35);
+        image(next_shapes[2], 560, 377);
+
+        next_shapes[3].resize(0, 35);
+        image(next_shapes[3], 560, 470);
+
+        next_shapes[4].resize(0, 35);
+        image(next_shapes[4], 560, 560);     
+    }
+
+    hold() {
+
+        let curr_hold = null;
+
+        if (hold.length != 0) {
+            curr_hold = hold[1];
+        }
+
+        imageMode(CENTER);
+
+        if (this.activeShape.blocks[0].srcImg == purple_sq) {
+            hold[0] = loadImage("assets/T_piece.png", img => {
+                img.resize(0, 45);
+            });
+            hold[1] = 5;
+        } else if (this.activeShape.blocks[0].srcImg == lightblue_sq) {
+            hold[0] = loadImage("assets/Line_piece.png", img => {
+                img.resize(0, 45);
+            });
+            hold[1] = 6;
+        } else if (this.activeShape.blocks[0].srcImg == darkblue_sq) {
+            hold[0] = loadImage("assets/J_piece.png", img => {
+                img.resize(0, 45);
+            });
+            hold[1] = 1;
+        } else if (this.activeShape.blocks[0].srcImg == yellow_sq) {
+            hold[0] = loadImage("assets/Box_piece.png", img => {
+                img.resize(0, 45);
+            });
+            hold[1] = 0;
+        } else if (this.activeShape.blocks[0].srcImg == orange_sq) {
+            hold[0] = loadImage("assets/L_piece.png", img => {
+                img.resize(0, 45);
+            });
+            hold[1] = 2;
+        } else if (this.activeShape.blocks[0].srcImg == green_sq) {
+            hold[0] = loadImage("assets/S_piece.png", img => {
+                img.resize(0, 45);
+            });
+            hold[1] = 4;
+        } else if (this.activeShape.blocks[0].srcImg == pink_sq) {
+            hold[0] = loadImage("assets/Z_piece.png", img => {
+                img.resize(0, 45);
+            });
+            hold[1] = 3;
+        }
+
+        for (let i = 0; i < this.activeShape.blocks.length; i++) {
+            let curr_block = this.activeShape.blocks[i]; 
+
+            this.pieces.splice(this.pieces.indexOf(curr_block.position), 1);                           
+            this.gameboard[curr_block.position[0]][curr_block.position[1]] = null;
+        }
+
+        if (curr_hold != null) {
+            randomShape(curr_hold);          
+        } else {
+            this.activeShape.shape = false;
         }
 
     }
