@@ -62,7 +62,7 @@ class Gameboard {
     }
 
     /**
-     * Translates the activeShape to the provided blocks array. Ensure that the translation is legitimate by checking the blocks array with checkMove(blocks) first.
+     * Translates the blocks that make up the activeShape to the position of the blocks in the provided array. Ensure that the translation is legitimate by checking the blocks array with checkMove(blocks) first.
      * @param {Block[]} blocks Array of block objects with updated positions for the activeShape.
      */
     shiftShape(blocks) { // Blocks are block objects with new positions -- Should be checked with checkMove already.
