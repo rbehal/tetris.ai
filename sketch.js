@@ -38,7 +38,7 @@ function setup() {
   for (let i = 0; i < 5; i++) {
     rand_shapes.push(randomNumber());
   }
-  console.log(rand_shapes);
+
 }
 
 function draw() {
@@ -96,7 +96,7 @@ function keyPressed() {
     gameboard.moveDown();
   }
   if (keyCode === UP_ARROW) {
-    gameboard.rotate(gameboard.activeShape);
+    gameboard.rotate();
   }
   if (keyCode == 32) { // ASCII for spacebar
     let swtch = true;
