@@ -9,6 +9,10 @@ class Block {
     this.static = false;
   }
 
+  /**
+   * Returns copy of block object.
+   * @returns Returns new block object with the same colour and position.
+   */
   copy() {
     return new Block([this.position[0], this.position[1]], this.srcImg);
   }

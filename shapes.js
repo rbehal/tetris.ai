@@ -1,10 +1,12 @@
 class Shapes {
+
   constructor() {
-    this.blocks = [];
-    this.shape = true;
-    this.status = 0;
+    this.blocks = []; // Array of block objects that make up the shape
+    this.shape = true; // If it is still an "in-play" shape, i.e. not static, this.shape = true
+    this.status = 0; // Representing the current state of rotation. 0 being the state it spawned in.
   }
 
+  // Spawn functions spawn the respective shapes to the board. Return true if possible, stops the game and false if not. (game over)
   spawnBox() {
     this.blocks = [new Block([4, 0], yellow_sq), new Block([5, 0], yellow_sq), new Block([4, 1], yellow_sq), new Block([5, 1], yellow_sq)];
 
@@ -89,14 +91,21 @@ class Shapes {
     }
   }
 
+  /**
+   * Stops the activeShape from dropping changing the blocks' static attributes to true and setting this.shape to false.
+   */
   stopDrop() {
     for (var i = 0; i < this.blocks.length; i++) {
       this.blocks[i].static = true;
     }
     this.shape = false;
-    gameboard.clearLine(); 
+    gameboard.clearLine(); // Full lines need to be cleared when a shape stops, before a new shape spawns.
   }
 
+  /**
+   * Returns a deep copy of the blocks array for the shape it was called on.
+   * @returns {Block[]} Array of blocks. 
+   */
   copyBlocks() {
     let blocks_copy = [];
     for (var i = 0; i < this.blocks.length; i++) {
