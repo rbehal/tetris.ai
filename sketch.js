@@ -3,6 +3,13 @@ var activeShape; // The current activeShape (falling shape on the board)
 var seconds = 0;
 var frames = 0;
 var rand_shapes = []; // Array of integers that correspond to random shapes. See randomShape() for more info.
+var keydown = 0;
+var timer;
+
+// Variables for running moves on intervals when a key is held down.
+var lKey;
+var rKey;
+var dKey;
 
 // Block image variables to be used on the grid.
 var darkblue_sq;
@@ -91,13 +98,13 @@ function mouseClicked() { // For testing
  */
 function keyPressed() {
   if (keyCode === LEFT_ARROW) {
-    gameboard.moveLeft();
+    lKey = setInterval(function() {gameboard.moveLeft();}, 75); // Runs moveLeft ever 75 ms.
   }
   if (keyCode === RIGHT_ARROW) {
-    gameboard.moveRight();
-  }
+    rKey = setInterval(function() {gameboard.moveRight();}, 75);
+  } 
   if (keyCode === DOWN_ARROW) {
-    gameboard.moveDown();
+    dKey = setInterval(function() {gameboard.moveDown();}, 75);
   }
   if (keyCode === UP_ARROW) {
     gameboard.rotate();
@@ -110,6 +117,21 @@ function keyPressed() {
   }
   if (keyCode == 16) { // ASCII for shift
     gameboard.hold();
+  }
+}
+
+/**
+ * Runs any time a key is released.
+ */
+function keyReleased() {
+  if (keyCode === LEFT_ARROW) {
+    clearInterval(lKey);
+  }
+  if (keyCode === RIGHT_ARROW) {
+    clearInterval(rKey);
+  }
+  if (keyCode === DOWN_ARROW) {
+    clearInterval(dKey);
   }
 }
 
