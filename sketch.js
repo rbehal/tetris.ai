@@ -99,15 +99,19 @@ function mouseClicked() { // For testing
 function keyPressed() {
   if (keyCode === LEFT_ARROW) {
     lKey = setInterval(function() {gameboard.moveLeft();}, 75); // Runs moveLeft ever 75 ms.
+    return false;
   }
   if (keyCode === RIGHT_ARROW) {
     rKey = setInterval(function() {gameboard.moveRight();}, 75);
+    return false;
   } 
   if (keyCode === DOWN_ARROW) {
     dKey = setInterval(function() {gameboard.moveDown();}, 75);
+    return false;
   }
   if (keyCode === UP_ARROW) {
     gameboard.rotate();
+    return false;
   }
   if (keyCode == 32) { // ASCII for spacebar
     let swtch = true;
@@ -134,6 +138,24 @@ function keyReleased() {
     clearInterval(dKey);
   }
 }
+
+// Prevents scrolling up and down through the arrow keys
+var keys = {};
+window.addEventListener("keydown",
+    function(e){
+        keys[e.keyCode] = true;
+        switch(e.keyCode){
+            case 37: case 39: case 38:  case 40: // Arrow keys
+            case 32: e.preventDefault(); break; // Space
+            default: break; // do not block other keys
+        }
+    },
+false);
+window.addEventListener('keyup',
+    function(e){
+        keys[e.keyCode] = false;
+    },
+false);
 
 /**
  * Returns a number that is a random roll of the die from 0 to 7 where 0 to 6 correspond to a shape and 7 is a reroll. 
