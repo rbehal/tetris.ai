@@ -741,6 +741,9 @@ class Gameboard {
             }
         }
         frames++;
+        if (frames > 53) { // This is just a failsafe in case something goes wrong and it dosen't switch earlier.
+            frames = 0; 
+        }
         return Math.floor(lines_cleared/10) + 1;
     }
 
