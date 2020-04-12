@@ -30,7 +30,7 @@ var S_img;
 var Line_img;
 var Box_img;
 
-var hold = []; // hold[0] represents the image object in hold. hold[1] represents the # corresponding the shape.
+var hold = []; // hold[0] represents the image object in hold. hold[1] represents the # corresponding the shape. hold[2] checks for double shifting.
 
 
 /**

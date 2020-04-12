@@ -99,6 +99,7 @@ class Shapes {
       this.blocks[i].static = true;
     }
     this.shape = false;
+    hold[2] = 0; // Resets double shifting
     gameboard.clearLine(); // Full lines need to be cleared when a shape stops, before a new shape spawns.
   }
 

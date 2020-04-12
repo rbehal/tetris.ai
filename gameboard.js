@@ -572,8 +572,13 @@ class Gameboard {
 
     /**
      * Puts the current piece in hold and spawns the hold piece if there is one. 
+     * @returns true if the move was made successfully, false if not.
      */
     hold() {
+        if (hold[2] == 1) {  // Checks for double shifting
+            return false;
+        }
+
         let curr_hold = null;
         // hold[0] represents the image object in hold. hold[1] represents the # corresponding the shape.
         if (hold.length != 0) {
@@ -634,6 +639,9 @@ class Gameboard {
         } else {
             this.activeShape.shape = false;
         }
+
+        hold[2] = 1; 
+        return true;
     }
 
     /**
