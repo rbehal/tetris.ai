@@ -4,7 +4,8 @@ var seconds = 0;
 var frames = 0;
 var rand_shapes = []; // Array of integers that correspond to random shapes. See randomShape() for more info.
 var keydown = 0;
-var timer;
+var timer = 0;
+var lines_cleared = 0;
 
 // Variables for running moves on intervals when a key is held down.
 var lKey;
@@ -70,15 +71,17 @@ function draw() {
   gameboard.display(); // Renders every active block on the grid.
 
   // Timer
-  frames++;
-  if (frames == 60) {
+  timer++;
+  if (timer == 60) {
     seconds++;
-    frames = 0;
-    // TODO: Replace with level mechanism that adjusts the rate of moving down
-    this.gameboard.moveDown(); // Shifts gameboard down once per second
+    timer = 0;
   }
+
   fill(255);
   text(seconds.toString(), width / 2 - 5, 60); // Renders seconds text at the top
+
+  fill(0);
+  text("Level: " + gameboard.calculateLevel().toString(), 0, 300); // calculateLevel() moves active piece down (speed based on level) and returns level #
 }
 
 /**
@@ -91,6 +94,8 @@ function mouseClicked() { // For testing
   // gameboard.clearLine();
   // noLoop();
   // gameboard.deleteHold();
+  // lines_cleared += 10;
+  // frames = 0;
 }
 
 /**
