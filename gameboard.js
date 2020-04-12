@@ -581,7 +581,7 @@ class Gameboard {
 
         let curr_hold = null;
         // hold[0] represents the image object in hold. hold[1] represents the # corresponding the shape.
-        if (hold.length != 0) {
+        if (hold[1] != null) {
             curr_hold = hold[1]; 
         }
 
@@ -741,9 +741,9 @@ class Gameboard {
             }
         }
         frames++;
-        if (frames > 53) { // This is just a failsafe in case something goes wrong and it dosen't switch earlier.
-            frames = 0; 
-        }
+        // if (frames > 53) { // This is just a failsafe in case something goes wrong and it dosen't switch earlier.
+        //     frames = 0; 
+        // }
         return Math.floor(lines_cleared/10) + 1;
     }
 

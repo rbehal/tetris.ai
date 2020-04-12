@@ -30,7 +30,7 @@ var S_img;
 var Line_img;
 var Box_img;
 
-var hold = []; // hold[0] represents the image object in hold. hold[1] represents the # corresponding the shape. hold[2] checks for double shifting.
+var hold = [null, null, null]; // hold[0] represents the image object in hold. hold[1] represents the # corresponding the shape. hold[2] checks for double shifting.
 
 
 /**
@@ -59,7 +59,7 @@ function draw() {
 
   gameboard.displayNext(); // Displays all of the pieces coming up next.
 
-  if (hold.length != 0) {
+  if (hold[0] != null) {
     image(hold[0], 75, 160); // Displays the hold image.
   }
 
