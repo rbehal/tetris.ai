@@ -461,6 +461,7 @@ class Gameboard {
                 } else {
                     if (curr_block.position[0] == 9) {
                         this.deleteLine(full_row);
+                        lines_cleared++;
                     }
                 }
             }
@@ -573,7 +574,6 @@ class Gameboard {
      * Puts the current piece in hold and spawns the hold piece if there is one. 
      */
     hold() {
-
         let curr_hold = null;
         // hold[0] represents the image object in hold. hold[1] represents the # corresponding the shape.
         if (hold.length != 0) {
@@ -634,7 +634,108 @@ class Gameboard {
         } else {
             this.activeShape.shape = false;
         }
-
     }
+
+    /**
+     * Moves the active piece down at a speed that's based on the level.
+     * @returns the current level
+     */
+    calculateLevel() {
+        if (lines_cleared < 10) {
+            if (frames == 53) {
+                frames = 0;
+                this.moveDown(); 
+            }
+        } else if (lines_cleared < 20) {
+            if (frames == 49) {
+                frames = 0;
+                this.moveDown(); 
+            }
+        } else if (lines_cleared < 30) {
+            if (frames == 45) {
+                frames = 0;
+                this.moveDown(); 
+            }
+        } else if (lines_cleared < 40) {
+            if (frames == 41) {
+                frames = 0;
+                this.moveDown(); 
+            }
+        } else if (lines_cleared < 50) {
+            if (frames == 37) {
+                frames = 0;
+                this.moveDown(); 
+            }
+        } else if (lines_cleared < 60) {
+            if (frames == 33) {
+                frames = 0;
+                this.moveDown(); 
+            }
+        } else if (lines_cleared < 70) {
+            if (frames == 28) {
+                frames = 0;
+                this.moveDown(); 
+            }
+        } else if (lines_cleared < 80) {
+            if (frames == 22) {
+                frames = 0;
+                this.moveDown(); 
+            }
+        } else if (lines_cleared < 90) {
+            if (frames == 17) {
+                frames = 0;
+                this.moveDown(); 
+            }
+        } else if (lines_cleared < 100) {
+            if (frames == 11) {
+                frames = 0;
+                this.moveDown(); 
+            }
+        } else if (lines_cleared < 110) {
+            if (frames == 10) {
+                frames = 0;
+                this.moveDown(); 
+            }
+        } else if (lines_cleared < 120) {
+            if (frames == 9) {
+                frames = 0;
+                this.moveDown(); 
+            }
+        } else if (lines_cleared < 130) {
+            if (frames == 8) {
+                frames = 0;
+                this.moveDown(); 
+            }
+        } else if (lines_cleared < 140) {
+            if (frames == 7) {
+                frames = 0;
+                this.moveDown(); 
+            }
+        } else if (lines_cleared < 160) {
+            if (frames == 6) {
+                frames = 0;
+                this.moveDown(); 
+            }
+        } else if (lines_cleared < 180) {
+            if (frames == 5) {
+                frames = 0;
+                this.moveDown(); 
+            }
+        } else if (lines_cleared < 200) { 
+            if (frames == 4) {
+                frames = 0;
+                this.moveDown(); 
+            }
+        } else {
+            if (frames == 3) {
+                frames = 0;
+                this.moveDown();
+            }
+        }
+        frames++;
+        return Math.floor(lines_cleared/10) + 1;
+    }
+
+
 
 }
