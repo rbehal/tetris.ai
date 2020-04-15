@@ -117,9 +117,10 @@ class Gameboard {
 
     /**
      * Translates the activeShape's blocks one block downwards.
+     * @param no_lock_delay Optional parameter; if true, piece will drop without the lock delay.
      * @returns {boolean} true if the move was successfully made, false if it was not.
      */
-    moveDown() {
+    moveDown(no_lock_delay) {
         let proposed_blocks = this.activeShape.copyBlocks();
 
         for (var i = 0; i < proposed_blocks.length; i++) {
@@ -127,8 +128,18 @@ class Gameboard {
             candidate.position[1]++;
         }
 
-        if (!this.checkMove(proposed_blocks)) {
-            this.activeShape.stopDrop();
+        if (!this.checkMove(proposed_blocks)) { // If it is on the ground/cannot go any lower.
+            if (no_lock_delay) {
+                lockDelay = null;
+                this.activeShape.stopDrop();
+            } else { 
+                if (lockDelay == null) { // Creates lock delay if one doesn't exist
+                    lockDelay = new LockDelay(level); 
+                } else if (lockDelay.time <= 0) {  // If lock delay time is up, lock piece in place.
+                    lockDelay = null; 
+                    this.activeShape.stopDrop();
+                }
+            }
             return false;
         } else {
             this.shiftShape(proposed_blocks);
@@ -148,6 +159,10 @@ class Gameboard {
             candidate.position[0]++;
         }
 
+        if (lockDelay != null) {
+            lockDelay.resetTime();
+        }
+
         return this.makeMove(proposed_blocks);
     }
 
@@ -161,6 +176,10 @@ class Gameboard {
         for (var i = 0; i < proposed_blocks.length; i++) {
             let candidate = proposed_blocks[i];
             candidate.position[0]--;
+        }
+
+        if (lockDelay != null) {
+            lockDelay.resetTime();
         }
 
         return this.makeMove(proposed_blocks);
@@ -740,11 +759,14 @@ class Gameboard {
                 this.moveDown();
             }
         }
+
         frames++;
         if (frames > 53) { // This is just a failsafe in case something goes wrong and it dosen't switch earlier.
             frames = 0; 
         }
-        return Math.floor(lines_cleared/10) + 1;
+
+        level = Math.floor(lines_cleared/10) + 1;
+        return level;
     }
 
 
