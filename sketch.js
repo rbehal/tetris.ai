@@ -1,11 +1,14 @@
 var gameboard; // Holds the one and only gameboard object for the game.
 var activeShape; // The current activeShape (falling shape on the board)
+var lockDelay = null;
+var noLockDelay = true;
 var seconds = 0;
 var frames = 0;
 var rand_shapes = []; // Array of integers that correspond to random shapes. See randomShape() for more info.
 var keydown = 0;
 var timer = 0;
 var lines_cleared = 0;
+var level = 0;
 
 // Variables for running moves on intervals when a key is held down.
 var lKey;
@@ -54,16 +57,19 @@ function setup() {
 function draw() {
   background(255);
 
+  // Displays gameboard background.
   imageMode(CORNER);
-  image(gameboard.gameboard_img, 20, 20); // Displays gameboard background.
+  image(gameboard.gameboard_img, 20, 20); 
 
   gameboard.displayNext(); // Displays all of the pieces coming up next.
 
+  // Displays the hold image.
   if (hold[0] != null) {
-    image(hold[0], 75, 160); // Displays the hold image.
+    image(hold[0], 75, 160); 
   }
 
-  if (gameboard.activeShape.shape == false) { // Generates new random shape if there is none on the board.
+  // Generates new random shape if there is none on the board.
+  if (gameboard.activeShape.shape == false) { 
     randomShape(rand_shapes.shift()); // dequeue
     rand_shapes.push(randomNumber()); // enqueue
   }
@@ -76,12 +82,17 @@ function draw() {
     seconds++;
     timer = 0;
   }
-
   fill(255);
-  text(seconds.toString(), width / 2 - 5, 60); // Renders seconds text at the top
+  text(seconds.toString(), width / 2 - 5, 60); 
 
+  // Lock delay 
+  if (lockDelay != null) {
+    lockDelay.time--; 
+  }
+
+  // calculateLevel() moves active piece down (speed based on level) and returns level #
   fill(0);
-  text("Level: " + gameboard.calculateLevel().toString(), 0, 300); // calculateLevel() moves active piece down (speed based on level) and returns level #
+  text("Level: " + gameboard.calculateLevel().toString(), 0, 300);
 }
 
 /**
@@ -121,7 +132,7 @@ function keyPressed() {
   if (keyCode == 32) { // ASCII for spacebar
     let swtch = true;
     while (swtch) {
-      swtch = gameboard.moveDown(); // Moves down until it can't anymore
+      swtch = gameboard.moveDown(true); // Moves down until it can't anymore
     }
   }
   if (keyCode == 16) { // ASCII for shift
