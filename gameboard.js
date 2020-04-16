@@ -3,10 +3,6 @@ class Gameboard {
     constructor() {
         this.gameboard_img = loadImage('assets/TetrisBoard.png'); // Tetris gameboard
 
-        // Variables for holding the current level and speed
-        this.level = 1;
-        this.speed = 1;
-
         // x and y of the top left corner of the top left corner of the grid
         this.initial = [145, 73];
 
@@ -115,12 +111,13 @@ class Gameboard {
         return true;
     }
 
-    /**
+    /** 
      * Translates the activeShape's blocks one block downwards.
-     * @param no_lock_delay Optional parameter; if true, piece will drop without the lock delay.
+     * @param no_lock_delay {boolean} Optional parameter; if true, piece will drop without the lock delay.
+     * @param addScore {boolean} Adds 1 to the score per cell shifted down if true, otherwise does does nothing.
      * @returns {boolean} true if the move was successfully made, false if it was not.
      */
-    moveDown(no_lock_delay) {
+    moveDown(no_lock_delay, addScore = false) {
         let proposed_blocks = this.activeShape.copyBlocks();
 
         for (var i = 0; i < proposed_blocks.length; i++) {
@@ -143,6 +140,7 @@ class Gameboard {
             return false;
         } else {
             this.shiftShape(proposed_blocks);
+            score += addScore; 
             return true;
         }
     }
@@ -475,7 +473,7 @@ class Gameboard {
             let full_row = full_lines[i];
             for (var j = 0; j < this.gameboard.length; j++) {
                 let curr_block = this.gameboard[j][full_row];
-                if (curr_block.static == false) { // Checks that none of the full lines include an activeShape's blocks
+                if (curr_block.static == false) { // Checks that none of the full lines include an activeShape's blocks -- This is probably unnecessary
                     break;
                 } else {
                     if (curr_block.position[0] == 9) {
@@ -484,6 +482,16 @@ class Gameboard {
                     }
                 }
             }
+        }
+
+        if (full_lines.length == 4) { // Consider creating separate score.js if you want to add T-spins and such.
+            score += 1200 * level;
+        } else if (full_lines.length == 3) {
+            score += 300 * level;
+        } else if (full_lines.length == 2) {
+            score += 100 * level;
+        } else if (full_lines.length == 1) {
+            score += 40 * level; 
         }
 
         if (full_lines.length > 0) { // Shifts all other rows (not full) the appropriate amount to take into account the full row disappearing
