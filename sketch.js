@@ -1,7 +1,7 @@
 var gameboard; // Holds the one and only gameboard object for the game.
 var activeShape; // The current activeShape (falling shape on the board)
-var lockDelay = null;
-var noLockDelay = true;
+var lockDelay = null; // lockDelay object is stored in this variable when piece is on the ground
+var score = 0;
 var seconds = 0;
 var frames = 0;
 var rand_shapes = []; // Array of integers that correspond to random shapes. See randomShape() for more info.
@@ -93,6 +93,8 @@ function draw() {
   // calculateLevel() moves active piece down (speed based on level) and returns level #
   fill(0);
   text("Level: " + gameboard.calculateLevel().toString(), 0, 300);
+  text("Score: " + score.toString(), 0, 350);
+
 }
 
 /**
@@ -122,7 +124,7 @@ function keyPressed() {
     return false;
   } 
   if (keyCode === DOWN_ARROW) {
-    dKey = setInterval(function() {gameboard.moveDown();}, 75);
+    dKey = setInterval(function() {gameboard.moveDown(false, addScore = true);}, 75);
     return false;
   }
   if (keyCode === UP_ARROW) {
@@ -132,7 +134,7 @@ function keyPressed() {
   if (keyCode == 32) { // ASCII for spacebar
     let swtch = true;
     while (swtch) {
-      swtch = gameboard.moveDown(true); // Moves down until it can't anymore
+      swtch = gameboard.moveDown(true, addScore = true); // Moves down until it can't anymore
     }
   }
   if (keyCode == 16) { // ASCII for shift
