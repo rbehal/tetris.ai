@@ -196,10 +196,14 @@ class Gameboard {
             } else if (this.moveRight()) {
                 if (tRotation()) {
                     return true;
+                } else {
+                    this.moveLeft();
                 }
             } else if (this.moveLeft()) {
                 if (tRotation()) {
                     return true;
+                } else {
+                    this.moveRight();
                 }
             }
         }
@@ -210,10 +214,14 @@ class Gameboard {
             } else if (this.moveRight()) {
                 if (jRotation()) {
                     return true;
+                } else {
+                    this.moveLeft();
                 }
             } else if (this.moveLeft()) {
                 if (jRotation()) {
                     return true;
+                } else {
+                    this.moveRight();
                 }
             }
         }
@@ -224,10 +232,14 @@ class Gameboard {
             } else if (this.moveRight()) {
                 if (lRotation()) {
                     return true;
+                } else {
+                    this.moveLeft();
                 }
             } else if (this.moveLeft()) {
                 if (lRotation()) {
                     return true;
+                } else {
+                    this.moveRight();
                 }
             }
         }
@@ -238,10 +250,14 @@ class Gameboard {
             } else if (this.moveRight()) {
                 if (sRotation()) {
                     return true;
+                } else {
+                    this.moveLeft();
                 }
             } else if (this.moveLeft()) {
                 if (sRotation()) {
                     return true;
+                } else {
+                    this.moveRight();
                 }
             }
         }
@@ -252,17 +268,48 @@ class Gameboard {
             } else if (this.moveRight()) {
                 if (zRotation()) {
                     return true;
+                } else {
+                    this.moveLeft();
                 }
             } else if (this.moveLeft()) {
                 if (zRotation()) {
                     return true;
+                } else {
+                    this.moveRight();
                 }
             }
         }
 
         if (this.activeShape.blocks[0].srcImg == lightblue_sq) { // Line rotation
-            lineRotation();
-            return true;
+            if (lineRotation()) {
+                return true;
+            } else if (this.moveRight()) {
+                if (lineRotation()) {
+                    return true;
+                } else if (this.moveRight()) {
+                    if (lineRotation()) {
+                        return true;
+                    } else {
+                        this.moveLeft();
+                        this.moveLeft();
+                    }
+                } else {
+                    this.moveLeft();
+                }
+            } else if (this.moveLeft()) {
+                if (lineRotation()) {
+                    return true;
+                } else if (this.moveLeft()) {
+                    if (lineRotation()) {
+                        return true;
+                    } else {
+                        this.moveRight();
+                        this.moveRight();
+                    }
+                } else {
+                    this.moveRight();
+                }
+            }
         }
 
         if (this.activeShape.blocks[0].srcImg == yellow_sq) { // Box rotation
