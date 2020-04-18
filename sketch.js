@@ -245,6 +245,73 @@ function preloadImages() {
   J_img= loadImage("assets/J_piece.png");
   Line_img = loadImage("assets/Line_piece.png");
   Box_img = loadImage("assets/Box_piece.png");
+
+  // Necessary for the NEXT images
+  T_img0 = loadImage("assets/T_piece.png", img => {
+    img.resize(0, 45);
+  });
+  Z_img0 = loadImage("assets/Z_piece.png", img => {
+    img.resize(0, 45);
+  });
+  S_img0 = loadImage("assets/S_piece.png", img => {
+    img.resize(0, 45);
+  });
+  L_img0 = loadImage("assets/L_piece.png", img => {
+    img.resize(0, 45);
+  });
+  J_img0 = loadImage("assets/J_piece.png", img => {
+    img.resize(0, 45);
+  });
+  Line_img0 = loadImage("assets/Line_piece.png", img => {
+    img.resize(0, 45);
+  });
+  Box_img0 = loadImage("assets/Box_piece.png", img => {
+    img.resize(0, 45);
+  }); 
+
+  T_img1 = loadImage("assets/T_piece.png", img => {
+    img.resize(0, 40);
+  });
+  Z_img1 = loadImage("assets/Z_piece.png", img => {
+    img.resize(0, 40);
+  });
+  S_img1 = loadImage("assets/S_piece.png", img => {
+    img.resize(0, 40);
+  });
+  L_img1 = loadImage("assets/L_piece.png", img => {
+    img.resize(0, 40);
+  });
+  J_img1 = loadImage("assets/J_piece.png", img => {
+    img.resize(0, 40);
+  });
+  Line_img1 = loadImage("assets/Line_piece.png", img => {
+    img.resize(0, 40);
+  });
+  Box_img1 = loadImage("assets/Box_piece.png", img => {
+    img.resize(0, 40);
+  });
+
+  T_img2 = loadImage("assets/T_piece.png", img => {
+    img.resize(0, 35);
+  });
+  Z_img2 = loadImage("assets/Z_piece.png", img => {
+    img.resize(0, 35);
+  });
+  S_img2 = loadImage("assets/S_piece.png", img => {
+    img.resize(0, 35);
+  });
+  L_img2 = loadImage("assets/L_piece.png", img => {
+    img.resize(0, 35);
+  });
+  J_img2 = loadImage("assets/J_piece.png", img => {
+    img.resize(0, 35);
+  });
+  Line_img2 = loadImage("assets/Line_piece.png", img => {
+    img.resize(0, 35);
+  });
+  Box_img2 = loadImage("assets/Box_piece.png", img => {
+    img.resize(0, 35);
+  });
 }
 
 
