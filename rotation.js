@@ -1,7 +1,10 @@
 // All functions take in a proposed_blocks array that consists of the CURRENT positions of the active piece.
 // Returns true if rotation was successful, false if not.
 
-function tRotation(proposed_blocks) {
+function tRotation() {
+
+    let proposed_blocks = gameboard.activeShape.copyBlocks();
+    
     if (gameboard.activeShape.status == 0) {
         proposed_blocks[0].position = [proposed_blocks[0].position[0] + 1, proposed_blocks[0].position[1] - 2];
         proposed_blocks[1].position = [proposed_blocks[1].position[0], proposed_blocks[1].position[1] - 1];
@@ -40,7 +43,10 @@ function tRotation(proposed_blocks) {
     return false;
 }
 
-function jRotation(proposed_blocks) {
+function jRotation() {
+
+    let proposed_blocks = gameboard.activeShape.copyBlocks();
+
     if (gameboard.activeShape.status == 0) {
         proposed_blocks[0].position = [proposed_blocks[0].position[0] + 1, proposed_blocks[0].position[1] - 1];
         proposed_blocks[2].position = [proposed_blocks[2].position[0] - 2, proposed_blocks[2].position[1]];
@@ -79,7 +85,10 @@ function jRotation(proposed_blocks) {
     return false;
 }
 
-function lRotation(proposed_blocks) {
+function lRotation() {
+
+    let proposed_blocks = gameboard.activeShape.copyBlocks();
+
     if (gameboard.activeShape.status == 0) {
         proposed_blocks[0].position = [proposed_blocks[0].position[0] + 1, proposed_blocks[0].position[1] - 2];
         proposed_blocks[1].position = [proposed_blocks[1].position[0], proposed_blocks[1].position[1] - 1];
@@ -118,7 +127,10 @@ function lRotation(proposed_blocks) {
     return false;
 }
 
-function sRotation(proposed_blocks) {
+function sRotation() {
+
+    let proposed_blocks = gameboard.activeShape.copyBlocks();
+
     if (gameboard.activeShape.status == 0) {
         proposed_blocks[0].position = [proposed_blocks[0].position[0] + 1, proposed_blocks[0].position[1] - 2];
         proposed_blocks[1].position = [proposed_blocks[1].position[0], proposed_blocks[1].position[1] - 1];
@@ -156,7 +168,10 @@ function sRotation(proposed_blocks) {
     }
 }
 
-function zRotation(proposed_blocks) {
+function zRotation() {
+
+    let proposed_blocks = gameboard.activeShape.copyBlocks();
+
     if (gameboard.activeShape.status == 0) {
         proposed_blocks[0].position = [proposed_blocks[0].position[0] + 2, proposed_blocks[0].position[1] - 1];
         proposed_blocks[1].position = [proposed_blocks[1].position[0] + 1, proposed_blocks[1].position[1]];
@@ -194,7 +209,10 @@ function zRotation(proposed_blocks) {
     }
 }
 
-function lineRotation(proposed_blocks) {
+function lineRotation() {
+
+    let proposed_blocks = gameboard.activeShape.copyBlocks();
+
     if (gameboard.activeShape.status == 0) {
         proposed_blocks[0].position = [proposed_blocks[0].position[0] + 1, proposed_blocks[0].position[1] - 3];
         proposed_blocks[1].position = [proposed_blocks[1].position[0], proposed_blocks[1].position[1] - 2];

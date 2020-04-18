@@ -188,38 +188,80 @@ class Gameboard {
      * @returns {boolean} true if the move was successfully made, false if it was not.
      */
     rotate() {
-
-        let proposed_blocks = this.activeShape.copyBlocks();
-
         // The relative translation positions for every shape from stage to stage was input manually
 
         if (this.activeShape.blocks[0].srcImg == purple_sq) { // T-block rotation
-            tRotation(proposed_blocks);
-            return true;
+            if (tRotation()) {
+                return true;
+            } else if (this.moveRight()) {
+                if (tRotation()) {
+                    return true;
+                }
+            } else if (this.moveLeft()) {
+                if (tRotation()) {
+                    return true;
+                }
+            }
         }
 
         if (this.activeShape.blocks[0].srcImg == darkblue_sq) { // J block rotation
-            jRotation(proposed_blocks);
-            return true;
+            if (jRotation()) {
+                return true;
+            } else if (this.moveRight()) {
+                if (jRotation()) {
+                    return true;
+                }
+            } else if (this.moveLeft()) {
+                if (jRotation()) {
+                    return true;
+                }
+            }
         }
 
         if (this.activeShape.blocks[0].srcImg == orange_sq) { // L block rotation
-            lRotation(proposed_blocks);
-            return true;
+            if (lRotation()) {
+                return true;
+            } else if (this.moveRight()) {
+                if (lRotation()) {
+                    return true;
+                }
+            } else if (this.moveLeft()) {
+                if (lRotation()) {
+                    return true;
+                }
+            }
         }
 
         if (this.activeShape.blocks[0].srcImg == green_sq) { // S block rotation
-            sRotation(proposed_blocks);
-            return true;
+            if (sRotation()) {
+                return true;
+            } else if (this.moveRight()) {
+                if (sRotation()) {
+                    return true;
+                }
+            } else if (this.moveLeft()) {
+                if (sRotation()) {
+                    return true;
+                }
+            }
         }
 
         if (this.activeShape.blocks[0].srcImg == pink_sq) { // Z block rotation
-            zRotation(proposed_blocks);
-            return true;
+            if (zRotation()) {
+                return true;
+            } else if (this.moveRight()) {
+                if (zRotation()) {
+                    return true;
+                }
+            } else if (this.moveLeft()) {
+                if (zRotation()) {
+                    return true;
+                }
+            }
         }
 
         if (this.activeShape.blocks[0].srcImg == lightblue_sq) { // Line rotation
-            lineRotation(proposed_blocks);
+            lineRotation();
             return true;
         }
 
