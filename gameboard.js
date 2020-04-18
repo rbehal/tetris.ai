@@ -516,39 +516,65 @@ class Gameboard {
     displayNext() {
         let next_shapes = []; // Holds the p5 image object for the upcoming shapes
 
-        rand_shapes.forEach(function (shape) { // Number used correspond to the way randomShape() in sketch.js works
-            if (shape == 0) {
-                next_shapes.push(Box_img);
-            } else if (shape == 1) {
-                next_shapes.push(J_img);
-            } else if (shape == 2) {
-                next_shapes.push(L_img);
-            } else if (shape == 3) {
-                next_shapes.push(Z_img);
-            } else if (shape == 4) {
-                next_shapes.push(S_img);
-            } else if (shape == 5) {
-                next_shapes.push(T_img);
-            } else if (shape == 6) {
-                next_shapes.push(Line_img);
+        for (var i = 0; i < rand_shapes.length; i++) { // Necessary to separate 3 times to prevent bluriness from constant resizing
+            let shape = rand_shapes[i];
+            if (i == 0) {
+                if (shape == 0) {
+                    next_shapes.push(Box_img0);
+                } else if (shape == 1) {
+                    next_shapes.push(J_img0);
+                } else if (shape == 2) {
+                    next_shapes.push(L_img0);
+                } else if (shape == 3) {
+                    next_shapes.push(Z_img0);
+                } else if (shape == 4) {
+                    next_shapes.push(S_img0);
+                } else if (shape == 5) {
+                    next_shapes.push(T_img0);
+                } else if (shape == 6) {
+                    next_shapes.push(Line_img0);
+                }
+            } else if (i == 1) {
+                if (shape == 0) {
+                    next_shapes.push(Box_img1);
+                } else if (shape == 1) {
+                    next_shapes.push(J_img1);
+                } else if (shape == 2) {
+                    next_shapes.push(L_img1);
+                } else if (shape == 3) {
+                    next_shapes.push(Z_img1);
+                } else if (shape == 4) {
+                    next_shapes.push(S_img1);
+                } else if (shape == 5) {
+                    next_shapes.push(T_img1);
+                } else if (shape == 6) {
+                    next_shapes.push(Line_img1);
+                }
+            } else { // After the first two next pieces, they're all the same size
+                if (shape == 0) {
+                    next_shapes.push(Box_img2);
+                } else if (shape == 1) {
+                    next_shapes.push(J_img2);
+                } else if (shape == 2) {
+                    next_shapes.push(L_img2);
+                } else if (shape == 3) {
+                    next_shapes.push(Z_img2);
+                } else if (shape == 4) {
+                    next_shapes.push(S_img2);
+                } else if (shape == 5) {
+                    next_shapes.push(T_img2);
+                } else if (shape == 6) {
+                    next_shapes.push(Line_img2);
+                } 
             }
-        })
+        }
 
         imageMode(CENTER);
         // Constant resizing causes blurriness
-        next_shapes[0].resize(0, 45);
         image(next_shapes[0], 560, 160);
-
-        next_shapes[1].resize(0, 40);
         image(next_shapes[1], 560, 280);
-
-        next_shapes[2].resize(0, 35);
         image(next_shapes[2], 560, 377);
-
-        next_shapes[3].resize(0, 35);
         image(next_shapes[3], 560, 470);
-
-        next_shapes[4].resize(0, 35);
         image(next_shapes[4], 560, 560);     
     }
 
