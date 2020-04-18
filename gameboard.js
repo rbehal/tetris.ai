@@ -184,6 +184,21 @@ class Gameboard {
     }
 
     /**
+     * Translates the activeShape's blocks one block up. !!!Should only be used by the rotate() function!!!
+     * @returns {boolean} true if the move was successfully made, false if it was not.
+     */
+    moveUp() {
+        let proposed_blocks = this.activeShape.copyBlocks();
+
+        for (var i = 0; i < proposed_blocks.length; i++) {
+            let candidate = proposed_blocks[i];
+            candidate.position[1]--;
+        }
+
+        return this.makeMove(proposed_blocks);
+    }
+
+    /**
      * Rotates the activeShape 90 degrees to the right.
      * @returns {boolean} true if the move was successfully made, false if it was not.
      */
@@ -206,6 +221,13 @@ class Gameboard {
                     this.moveRight();
                 }
             }
+            if (this.moveDown()) {
+                if (tRotation()) {
+                    return true;
+                } else {
+                    this.moveUp();
+                }
+            }
         }
 
         if (this.activeShape.blocks[0].srcImg == darkblue_sq) { // J block rotation
@@ -222,6 +244,13 @@ class Gameboard {
                     return true;
                 } else {
                     this.moveRight();
+                }
+            }
+            if (this.moveDown()) {
+                if (jRotation()) {
+                    return true;
+                } else {
+                    this.moveUp();
                 }
             }
         }
@@ -242,6 +271,13 @@ class Gameboard {
                     this.moveRight();
                 }
             }
+            if (this.moveDown()) {
+                if (lRotation()) {
+                    return true;
+                } else {
+                    this.moveUp();
+                }
+            }
         }
 
         if (this.activeShape.blocks[0].srcImg == green_sq) { // S block rotation
@@ -260,6 +296,13 @@ class Gameboard {
                     this.moveRight();
                 }
             }
+            if (this.moveDown()) {
+                if (sRotation()) {
+                    return true;
+                } else {
+                    this.moveUp();
+                }
+            }
         }
 
         if (this.activeShape.blocks[0].srcImg == pink_sq) { // Z block rotation
@@ -276,6 +319,13 @@ class Gameboard {
                     return true;
                 } else {
                     this.moveRight();
+                }
+            }
+            if (this.moveDown()) {
+                if (zRotation()) {
+                    return true;
+                } else {
+                    this.moveUp();
                 }
             }
         }

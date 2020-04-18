@@ -109,6 +109,7 @@ function mouseClicked() { // For testing
   // gameboard.deleteHold();
   // lines_cleared += 10;
   // frames = 0;
+  // this.gameboard.moveUp();
 }
 
 /**
