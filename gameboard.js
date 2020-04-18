@@ -184,255 +184,210 @@ class Gameboard {
     }
 
     /**
+     * Translates the activeShape's blocks one block up. !!!Should only be used by the rotate() function!!!
+     * @returns {boolean} true if the move was successfully made, false if it was not.
+     */
+    moveUp() {
+        let proposed_blocks = this.activeShape.copyBlocks();
+
+        for (var i = 0; i < proposed_blocks.length; i++) {
+            let candidate = proposed_blocks[i];
+            candidate.position[1]--;
+        }
+
+        return this.makeMove(proposed_blocks);
+    }
+
+    /**
      * Rotates the activeShape 90 degrees to the right.
      * @returns {boolean} true if the move was successfully made, false if it was not.
      */
     rotate() {
-
-        let proposed_blocks = this.activeShape.copyBlocks();
-
         // The relative translation positions for every shape from stage to stage was input manually
-
+        // The same thing is essentially done for every piece
         if (this.activeShape.blocks[0].srcImg == purple_sq) { // T-block rotation
-            if (this.activeShape.status == 0) {
-                proposed_blocks[0].position = [proposed_blocks[0].position[0] + 1, proposed_blocks[0].position[1] - 2];
-                proposed_blocks[1].position = [proposed_blocks[1].position[0], proposed_blocks[1].position[1] - 1];
-                proposed_blocks[2].position = [proposed_blocks[2].position[0] - 1, proposed_blocks[2].position[1]];
-                proposed_blocks[3].position = [proposed_blocks[3].position[0] + 1, proposed_blocks[3].position[1]];
-                if (this.makeMove(proposed_blocks)) {
-                    this.activeShape.status++;
+            if (tRotation()) { // Checks if it can do a regular rotation
+                return true;
+            } else if (this.moveRight()) { // If not, try a left wall kick
+                if (tRotation()) {
                     return true;
+                } else {
+                    this.moveLeft();
                 }
-            } else if (this.activeShape.status == 1) {
-                proposed_blocks[0].position = [proposed_blocks[0].position[0] + 1, proposed_blocks[0].position[1] + 1];
-                proposed_blocks[2].position = [proposed_blocks[2].position[0] - 1, proposed_blocks[2].position[1] - 1];
-                proposed_blocks[3].position = [proposed_blocks[3].position[0] - 1, proposed_blocks[3].position[1] + 1];
-                if (this.makeMove(proposed_blocks)) {
-                    this.activeShape.status++;
+            } else if (this.moveLeft()) { // If not, try a right wall kick
+                if (tRotation()) {
                     return true;
+                } else {
+                    this.moveRight();
                 }
-            } else if (this.activeShape.status == 2) {
-                proposed_blocks[0].position = [proposed_blocks[0].position[0] - 1, proposed_blocks[0].position[1] + 1];
-                proposed_blocks[2].position = [proposed_blocks[2].position[0] + 1, proposed_blocks[2].position[1] - 1];
-                proposed_blocks[3].position = [proposed_blocks[3].position[0] - 1, proposed_blocks[3].position[1] - 1];
-                if (this.makeMove(proposed_blocks)) {
-                    this.activeShape.status++;
+            }
+            if (this.moveDown()) { // If not, try an up wall kick
+                if (tRotation()) {
                     return true;
-                }
-            } else if (this.activeShape.status == 3) {
-                proposed_blocks[0].position = [proposed_blocks[0].position[0] - 1, proposed_blocks[0].position[1]];
-                proposed_blocks[1].position = [proposed_blocks[1].position[0], proposed_blocks[1].position[1] + 1];
-                proposed_blocks[2].position = [proposed_blocks[2].position[0] + 1, proposed_blocks[2].position[1] + 2];
-                proposed_blocks[3].position = [proposed_blocks[3].position[0] + 1, proposed_blocks[3].position[1]];
-                if (this.makeMove(proposed_blocks)) {
-                    this.activeShape.status = 0;
-                    return true;
+                } else {
+                    this.moveUp();
                 }
             }
         }
-
 
         if (this.activeShape.blocks[0].srcImg == darkblue_sq) { // J block rotation
-            if (this.activeShape.status == 0) {
-                proposed_blocks[0].position = [proposed_blocks[0].position[0] + 1, proposed_blocks[0].position[1] - 1];
-                proposed_blocks[2].position = [proposed_blocks[2].position[0] - 2, proposed_blocks[2].position[1]];
-                proposed_blocks[3].position = [proposed_blocks[3].position[0] - 1, proposed_blocks[3].position[1] + 1];
-                if (this.makeMove(proposed_blocks)) {
-                    this.activeShape.status++;
+            if (jRotation()) {
+                return true;
+            } else if (this.moveRight()) {
+                if (jRotation()) {
                     return true;
+                } else {
+                    this.moveLeft();
                 }
-            } else if (this.activeShape.status == 1) {
-                proposed_blocks[0].position = [proposed_blocks[0].position[0] + 1, proposed_blocks[0].position[1] + 2];
-                proposed_blocks[1].position = [proposed_blocks[1].position[0], proposed_blocks[1].position[1] + 1];
-                proposed_blocks[2].position = [proposed_blocks[2].position[0], proposed_blocks[2].position[1] - 1];
-                proposed_blocks[3].position = [proposed_blocks[3].position[0] - 1, proposed_blocks[3].position[1]];
-                if (this.makeMove(proposed_blocks)) {
-                    this.activeShape.status++;
+            } else if (this.moveLeft()) {
+                if (jRotation()) {
                     return true;
+                } else {
+                    this.moveRight();
                 }
-            } else if (this.activeShape.status == 2) {
-                proposed_blocks[0].position = [proposed_blocks[0].position[0] - 1, proposed_blocks[0].position[1]];
-                proposed_blocks[1].position = [proposed_blocks[1].position[0], proposed_blocks[1].position[1] - 1];
-                proposed_blocks[2].position = [proposed_blocks[2].position[0] + 2, proposed_blocks[2].position[1] - 1];
-                proposed_blocks[3].position = [proposed_blocks[3].position[0] + 1, proposed_blocks[3].position[1] - 2];
-                if (this.makeMove(proposed_blocks)) {
-                    this.activeShape.status++;
+            }
+            if (this.moveDown()) {
+                if (jRotation()) {
                     return true;
-                }
-            } else if (this.activeShape.status == 3) {
-                proposed_blocks[0].position = [proposed_blocks[0].position[0] - 1, proposed_blocks[0].position[1] - 1];
-                proposed_blocks[2].position = [proposed_blocks[2].position[0], proposed_blocks[2].position[1] + 2];
-                proposed_blocks[3].position = [proposed_blocks[3].position[0] + 1, proposed_blocks[3].position[1] + 1];
-                if (this.makeMove(proposed_blocks)) {
-                    this.activeShape.status = 0;
-                    return true;
+                } else {
+                    this.moveUp();
                 }
             }
         }
-
 
         if (this.activeShape.blocks[0].srcImg == orange_sq) { // L block rotation
-            if (this.activeShape.status == 0) {
-                proposed_blocks[0].position = [proposed_blocks[0].position[0] + 1, proposed_blocks[0].position[1] - 2];
-                proposed_blocks[1].position = [proposed_blocks[1].position[0], proposed_blocks[1].position[1] - 1];
-                proposed_blocks[2].position = [proposed_blocks[2].position[0] - 1, proposed_blocks[2].position[1]];
-                proposed_blocks[3].position = [proposed_blocks[3].position[0], proposed_blocks[3].position[1] + 1];
-                if (this.makeMove(proposed_blocks)) {
-                    this.activeShape.status++;
+            if (lRotation()) {
+                return true;
+            } else if (this.moveRight()) {
+                if (lRotation()) {
                     return true;
+                } else {
+                    this.moveLeft();
                 }
-            } else if (this.activeShape.status == 1) {
-                proposed_blocks[0].position = [proposed_blocks[0].position[0] + 1, proposed_blocks[0].position[1] + 1];
-                proposed_blocks[2].position = [proposed_blocks[2].position[0] - 1, proposed_blocks[2].position[1] - 1];
-                proposed_blocks[3].position = [proposed_blocks[3].position[0] - 2, proposed_blocks[3].position[1]];
-                if (this.makeMove(proposed_blocks)) {
-                    this.activeShape.status++;
+            } else if (this.moveLeft()) {
+                if (lRotation()) {
                     return true;
+                } else {
+                    this.moveRight();
                 }
-            } else if (this.activeShape.status == 2) {
-                proposed_blocks[0].position = [proposed_blocks[0].position[0] - 1, proposed_blocks[0].position[1] + 1];
-                proposed_blocks[2].position = [proposed_blocks[2].position[0] + 1, proposed_blocks[2].position[1] - 1];
-                proposed_blocks[3].position = [proposed_blocks[3].position[0], proposed_blocks[3].position[1] - 2];
-                if (this.makeMove(proposed_blocks)) {
-                    this.activeShape.status++;
+            }
+            if (this.moveDown()) {
+                if (lRotation()) {
                     return true;
-                }
-            } else if (this.activeShape.status == 3) {
-                proposed_blocks[0].position = [proposed_blocks[0].position[0] - 1, proposed_blocks[0].position[1]];
-                proposed_blocks[1].position = [proposed_blocks[1].position[0], proposed_blocks[1].position[1] + 1];
-                proposed_blocks[2].position = [proposed_blocks[2].position[0] + 1, proposed_blocks[2].position[1] + 2];
-                proposed_blocks[3].position = [proposed_blocks[3].position[0] + 2, proposed_blocks[3].position[1] + 1];
-                if (this.makeMove(proposed_blocks)) {
-                    this.activeShape.status = 0;
-                    return true;
+                } else {
+                    this.moveUp();
                 }
             }
         }
-
 
         if (this.activeShape.blocks[0].srcImg == green_sq) { // S block rotation
-            if (this.activeShape.status == 0) {
-                proposed_blocks[0].position = [proposed_blocks[0].position[0] + 1, proposed_blocks[0].position[1] - 2];
-                proposed_blocks[1].position = [proposed_blocks[1].position[0], proposed_blocks[1].position[1] - 1];
-                proposed_blocks[2].position = [proposed_blocks[2].position[0] + 1, proposed_blocks[2].position[1]];
-                proposed_blocks[3].position = [proposed_blocks[3].position[0], proposed_blocks[3].position[1] + 1];
-                if (this.makeMove(proposed_blocks)) {
-                    this.activeShape.status++;
+            if (sRotation()) {
+                return true;
+            } else if (this.moveRight()) {
+                if (sRotation()) {
                     return true;
+                } else {
+                    this.moveLeft();
                 }
-            } else if (this.activeShape.status == 1) {
-                proposed_blocks[0].position = [proposed_blocks[0].position[0] + 1, proposed_blocks[0].position[1] + 1];
-                proposed_blocks[2].position = [proposed_blocks[2].position[0] - 1, proposed_blocks[2].position[1] + 1];
-                proposed_blocks[3].position = [proposed_blocks[3].position[0] - 2, proposed_blocks[3].position[1]];
-                if (this.makeMove(proposed_blocks)) {
-                    this.activeShape.status++;
+            } else if (this.moveLeft()) {
+                if (sRotation()) {
                     return true;
+                } else {
+                    this.moveRight();
                 }
-            } else if (this.activeShape.status == 2) {
-                proposed_blocks[0].position = [proposed_blocks[0].position[0] - 1, proposed_blocks[0].position[1] + 1];
-                proposed_blocks[2].position = [proposed_blocks[2].position[0] - 1, proposed_blocks[2].position[1] - 1];
-                proposed_blocks[3].position = [proposed_blocks[3].position[0], proposed_blocks[3].position[1] - 2];
-                if (this.makeMove(proposed_blocks)) {
-                    this.activeShape.status++;
+            }
+            if (this.moveDown()) {
+                if (sRotation()) {
                     return true;
-                }
-            } else if (this.activeShape.status == 3) {
-                proposed_blocks[0].position = [proposed_blocks[0].position[0] - 1, proposed_blocks[0].position[1]];
-                proposed_blocks[1].position = [proposed_blocks[1].position[0], proposed_blocks[1].position[1] + 1];
-                proposed_blocks[2].position = [proposed_blocks[2].position[0] + 1, proposed_blocks[2].position[1]];
-                proposed_blocks[3].position = [proposed_blocks[3].position[0] + 2, proposed_blocks[3].position[1] + 1];
-                if (this.makeMove(proposed_blocks)) {
-                    this.activeShape.status = 0;
-                    return true;
+                } else {
+                    this.moveUp();
                 }
             }
         }
-
 
         if (this.activeShape.blocks[0].srcImg == pink_sq) { // Z block rotation
-            if (this.activeShape.status == 0) {
-                proposed_blocks[0].position = [proposed_blocks[0].position[0] + 2, proposed_blocks[0].position[1] - 1];
-                proposed_blocks[1].position = [proposed_blocks[1].position[0] + 1, proposed_blocks[1].position[1]];
-                proposed_blocks[2].position = [proposed_blocks[2].position[0], proposed_blocks[2].position[1] - 1];
-                proposed_blocks[3].position = [proposed_blocks[3].position[0] - 1, proposed_blocks[3].position[1]];
-                if (this.makeMove(proposed_blocks)) {
-                    this.activeShape.status++;
+            if (zRotation()) {
+                return true;
+            } else if (this.moveRight()) {
+                if (zRotation()) {
                     return true;
+                } else {
+                    this.moveLeft();
                 }
-            } else if (this.activeShape.status == 1) {
-                proposed_blocks[0].position = [proposed_blocks[0].position[0], proposed_blocks[0].position[1] + 2];
-                proposed_blocks[1].position = [proposed_blocks[1].position[0] - 1, proposed_blocks[1].position[1] + 1];
-                proposed_blocks[3].position = [proposed_blocks[3].position[0] - 1, proposed_blocks[3].position[1] - 1];
-                if (this.makeMove(proposed_blocks)) {
-                    this.activeShape.status++;
+            } else if (this.moveLeft()) {
+                if (zRotation()) {
                     return true;
+                } else {
+                    this.moveRight();
                 }
-            } else if (this.activeShape.status == 2) {
-                proposed_blocks[0].position = [proposed_blocks[0].position[0] - 2, proposed_blocks[0].position[1]];
-                proposed_blocks[1].position = [proposed_blocks[1].position[0] - 1, proposed_blocks[1].position[1] - 1];
-                proposed_blocks[3].position = [proposed_blocks[3].position[0] + 1, proposed_blocks[3].position[1] - 1];
-                if (this.makeMove(proposed_blocks)) {
-                    this.activeShape.status++;
+            }
+            if (this.moveDown()) {
+                if (zRotation()) {
                     return true;
-                }
-            } else if (this.activeShape.status == 3) {
-                proposed_blocks[0].position = [proposed_blocks[0].position[0], proposed_blocks[0].position[1] - 1];
-                proposed_blocks[1].position = [proposed_blocks[1].position[0] + 1, proposed_blocks[1].position[1]];
-                proposed_blocks[2].position = [proposed_blocks[2].position[0], proposed_blocks[2].position[1] + 1];
-                proposed_blocks[3].position = [proposed_blocks[3].position[0] + 1, proposed_blocks[3].position[1] + 2];
-                if (this.makeMove(proposed_blocks)) {
-                    this.activeShape.status = 0;
-                    return true;
+                } else {
+                    this.moveUp();
                 }
             }
         }
 
-
+        // Line piece must do extra walll kicks because of the extra length
         if (this.activeShape.blocks[0].srcImg == lightblue_sq) { // Line rotation
-            if (this.activeShape.status == 0) {
-                proposed_blocks[0].position = [proposed_blocks[0].position[0] + 1, proposed_blocks[0].position[1] - 3];
-                proposed_blocks[1].position = [proposed_blocks[1].position[0], proposed_blocks[1].position[1] - 2];
-                proposed_blocks[2].position = [proposed_blocks[2].position[0] - 1, proposed_blocks[2].position[1] - 1];
-                proposed_blocks[3].position = [proposed_blocks[3].position[0] - 2, proposed_blocks[3].position[1]];
-                if (this.makeMove(proposed_blocks)) {
-                    this.activeShape.status++;
+            if (lineRotation()) {
+                return true;
+            } else if (this.moveRight()) {
+                if (lineRotation()) {
                     return true;
+                } else if (this.moveRight()) {
+                    if (lineRotation()) {
+                        return true;
+                    } else {
+                        this.moveLeft();
+                        this.moveLeft();
+                    }
+                } else {
+                    this.moveLeft();
                 }
-            } else if (this.activeShape.status == 1) {
-                proposed_blocks[0].position = [proposed_blocks[0].position[0] + 2, proposed_blocks[0].position[1] + 3];
-                proposed_blocks[1].position = [proposed_blocks[1].position[0] + 1, proposed_blocks[1].position[1] + 2];
-                proposed_blocks[2].position = [proposed_blocks[2].position[0], proposed_blocks[2].position[1] + 1];
-                proposed_blocks[3].position = [proposed_blocks[3].position[0] - 1, proposed_blocks[3].position[1]];
-                if (this.makeMove(proposed_blocks)) {
-                    this.activeShape.status++;
+            } else if (this.moveLeft()) {
+                if (lineRotation()) {
                     return true;
+                } else if (this.moveLeft()) {
+                    if (lineRotation()) {
+                        return true;
+                    } else {
+                        this.moveRight();
+                        this.moveRight();
+                    }
+                } else {
+                    this.moveRight();
                 }
-            } else if (this.activeShape.status == 2) {
-                proposed_blocks[0].position = [proposed_blocks[0].position[0] - 1, proposed_blocks[0].position[1]];
-                proposed_blocks[1].position = [proposed_blocks[1].position[0], proposed_blocks[1].position[1] - 1];
-                proposed_blocks[2].position = [proposed_blocks[2].position[0] + 1, proposed_blocks[2].position[1] - 2];
-                proposed_blocks[3].position = [proposed_blocks[3].position[0] + 2, proposed_blocks[3].position[1] - 3];
-                if (this.makeMove(proposed_blocks)) {
-                    this.activeShape.status++;
+            }
+            if (this.moveDown()) {
+                if (lineRotation()) {
                     return true;
-                }
-            } else if (this.activeShape.status == 3) {
-                proposed_blocks[0].position = [proposed_blocks[0].position[0] - 2, proposed_blocks[0].position[1]];
-                proposed_blocks[1].position = [proposed_blocks[1].position[0] - 1, proposed_blocks[1].position[1] + 1];
-                proposed_blocks[2].position = [proposed_blocks[2].position[0], proposed_blocks[2].position[1] + 2];
-                proposed_blocks[3].position = [proposed_blocks[3].position[0] + 1, proposed_blocks[3].position[1] + 3];
-                if (this.makeMove(proposed_blocks)) {
-                    this.activeShape.status = 0;
-                    return true;
+                } else if (this.moveDown()) {
+                    if (lineRotation()) {
+                        return true;
+                    } else if (this.moveDown()) {
+                        if (lineRotation()) {
+                            return true;
+                        } else {
+                            for (var i = 0; i < 3; i++) {
+                                this.moveUp();
+                            }
+                        }
+                    } else {
+                        this.moveUp();
+                        this.moveUp();
+                    }
+                } else {
+                    this.moveUp();
                 }
             }
         }
-
 
         if (this.activeShape.blocks[0].srcImg == yellow_sq) { // Box rotation
             return true;
         }
-
 
         return false;
     }
