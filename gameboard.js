@@ -194,245 +194,38 @@ class Gameboard {
         // The relative translation positions for every shape from stage to stage was input manually
 
         if (this.activeShape.blocks[0].srcImg == purple_sq) { // T-block rotation
-            if (this.activeShape.status == 0) {
-                proposed_blocks[0].position = [proposed_blocks[0].position[0] + 1, proposed_blocks[0].position[1] - 2];
-                proposed_blocks[1].position = [proposed_blocks[1].position[0], proposed_blocks[1].position[1] - 1];
-                proposed_blocks[2].position = [proposed_blocks[2].position[0] - 1, proposed_blocks[2].position[1]];
-                proposed_blocks[3].position = [proposed_blocks[3].position[0] + 1, proposed_blocks[3].position[1]];
-                if (this.makeMove(proposed_blocks)) {
-                    this.activeShape.status++;
-                    return true;
-                }
-            } else if (this.activeShape.status == 1) {
-                proposed_blocks[0].position = [proposed_blocks[0].position[0] + 1, proposed_blocks[0].position[1] + 1];
-                proposed_blocks[2].position = [proposed_blocks[2].position[0] - 1, proposed_blocks[2].position[1] - 1];
-                proposed_blocks[3].position = [proposed_blocks[3].position[0] - 1, proposed_blocks[3].position[1] + 1];
-                if (this.makeMove(proposed_blocks)) {
-                    this.activeShape.status++;
-                    return true;
-                }
-            } else if (this.activeShape.status == 2) {
-                proposed_blocks[0].position = [proposed_blocks[0].position[0] - 1, proposed_blocks[0].position[1] + 1];
-                proposed_blocks[2].position = [proposed_blocks[2].position[0] + 1, proposed_blocks[2].position[1] - 1];
-                proposed_blocks[3].position = [proposed_blocks[3].position[0] - 1, proposed_blocks[3].position[1] - 1];
-                if (this.makeMove(proposed_blocks)) {
-                    this.activeShape.status++;
-                    return true;
-                }
-            } else if (this.activeShape.status == 3) {
-                proposed_blocks[0].position = [proposed_blocks[0].position[0] - 1, proposed_blocks[0].position[1]];
-                proposed_blocks[1].position = [proposed_blocks[1].position[0], proposed_blocks[1].position[1] + 1];
-                proposed_blocks[2].position = [proposed_blocks[2].position[0] + 1, proposed_blocks[2].position[1] + 2];
-                proposed_blocks[3].position = [proposed_blocks[3].position[0] + 1, proposed_blocks[3].position[1]];
-                if (this.makeMove(proposed_blocks)) {
-                    this.activeShape.status = 0;
-                    return true;
-                }
-            }
+            tRotation(proposed_blocks);
+            return true;
         }
-
 
         if (this.activeShape.blocks[0].srcImg == darkblue_sq) { // J block rotation
-            if (this.activeShape.status == 0) {
-                proposed_blocks[0].position = [proposed_blocks[0].position[0] + 1, proposed_blocks[0].position[1] - 1];
-                proposed_blocks[2].position = [proposed_blocks[2].position[0] - 2, proposed_blocks[2].position[1]];
-                proposed_blocks[3].position = [proposed_blocks[3].position[0] - 1, proposed_blocks[3].position[1] + 1];
-                if (this.makeMove(proposed_blocks)) {
-                    this.activeShape.status++;
-                    return true;
-                }
-            } else if (this.activeShape.status == 1) {
-                proposed_blocks[0].position = [proposed_blocks[0].position[0] + 1, proposed_blocks[0].position[1] + 2];
-                proposed_blocks[1].position = [proposed_blocks[1].position[0], proposed_blocks[1].position[1] + 1];
-                proposed_blocks[2].position = [proposed_blocks[2].position[0], proposed_blocks[2].position[1] - 1];
-                proposed_blocks[3].position = [proposed_blocks[3].position[0] - 1, proposed_blocks[3].position[1]];
-                if (this.makeMove(proposed_blocks)) {
-                    this.activeShape.status++;
-                    return true;
-                }
-            } else if (this.activeShape.status == 2) {
-                proposed_blocks[0].position = [proposed_blocks[0].position[0] - 1, proposed_blocks[0].position[1]];
-                proposed_blocks[1].position = [proposed_blocks[1].position[0], proposed_blocks[1].position[1] - 1];
-                proposed_blocks[2].position = [proposed_blocks[2].position[0] + 2, proposed_blocks[2].position[1] - 1];
-                proposed_blocks[3].position = [proposed_blocks[3].position[0] + 1, proposed_blocks[3].position[1] - 2];
-                if (this.makeMove(proposed_blocks)) {
-                    this.activeShape.status++;
-                    return true;
-                }
-            } else if (this.activeShape.status == 3) {
-                proposed_blocks[0].position = [proposed_blocks[0].position[0] - 1, proposed_blocks[0].position[1] - 1];
-                proposed_blocks[2].position = [proposed_blocks[2].position[0], proposed_blocks[2].position[1] + 2];
-                proposed_blocks[3].position = [proposed_blocks[3].position[0] + 1, proposed_blocks[3].position[1] + 1];
-                if (this.makeMove(proposed_blocks)) {
-                    this.activeShape.status = 0;
-                    return true;
-                }
-            }
+            jRotation(proposed_blocks);
+            return true;
         }
-
 
         if (this.activeShape.blocks[0].srcImg == orange_sq) { // L block rotation
-            if (this.activeShape.status == 0) {
-                proposed_blocks[0].position = [proposed_blocks[0].position[0] + 1, proposed_blocks[0].position[1] - 2];
-                proposed_blocks[1].position = [proposed_blocks[1].position[0], proposed_blocks[1].position[1] - 1];
-                proposed_blocks[2].position = [proposed_blocks[2].position[0] - 1, proposed_blocks[2].position[1]];
-                proposed_blocks[3].position = [proposed_blocks[3].position[0], proposed_blocks[3].position[1] + 1];
-                if (this.makeMove(proposed_blocks)) {
-                    this.activeShape.status++;
-                    return true;
-                }
-            } else if (this.activeShape.status == 1) {
-                proposed_blocks[0].position = [proposed_blocks[0].position[0] + 1, proposed_blocks[0].position[1] + 1];
-                proposed_blocks[2].position = [proposed_blocks[2].position[0] - 1, proposed_blocks[2].position[1] - 1];
-                proposed_blocks[3].position = [proposed_blocks[3].position[0] - 2, proposed_blocks[3].position[1]];
-                if (this.makeMove(proposed_blocks)) {
-                    this.activeShape.status++;
-                    return true;
-                }
-            } else if (this.activeShape.status == 2) {
-                proposed_blocks[0].position = [proposed_blocks[0].position[0] - 1, proposed_blocks[0].position[1] + 1];
-                proposed_blocks[2].position = [proposed_blocks[2].position[0] + 1, proposed_blocks[2].position[1] - 1];
-                proposed_blocks[3].position = [proposed_blocks[3].position[0], proposed_blocks[3].position[1] - 2];
-                if (this.makeMove(proposed_blocks)) {
-                    this.activeShape.status++;
-                    return true;
-                }
-            } else if (this.activeShape.status == 3) {
-                proposed_blocks[0].position = [proposed_blocks[0].position[0] - 1, proposed_blocks[0].position[1]];
-                proposed_blocks[1].position = [proposed_blocks[1].position[0], proposed_blocks[1].position[1] + 1];
-                proposed_blocks[2].position = [proposed_blocks[2].position[0] + 1, proposed_blocks[2].position[1] + 2];
-                proposed_blocks[3].position = [proposed_blocks[3].position[0] + 2, proposed_blocks[3].position[1] + 1];
-                if (this.makeMove(proposed_blocks)) {
-                    this.activeShape.status = 0;
-                    return true;
-                }
-            }
+            lRotation(proposed_blocks);
+            return true;
         }
-
 
         if (this.activeShape.blocks[0].srcImg == green_sq) { // S block rotation
-            if (this.activeShape.status == 0) {
-                proposed_blocks[0].position = [proposed_blocks[0].position[0] + 1, proposed_blocks[0].position[1] - 2];
-                proposed_blocks[1].position = [proposed_blocks[1].position[0], proposed_blocks[1].position[1] - 1];
-                proposed_blocks[2].position = [proposed_blocks[2].position[0] + 1, proposed_blocks[2].position[1]];
-                proposed_blocks[3].position = [proposed_blocks[3].position[0], proposed_blocks[3].position[1] + 1];
-                if (this.makeMove(proposed_blocks)) {
-                    this.activeShape.status++;
-                    return true;
-                }
-            } else if (this.activeShape.status == 1) {
-                proposed_blocks[0].position = [proposed_blocks[0].position[0] + 1, proposed_blocks[0].position[1] + 1];
-                proposed_blocks[2].position = [proposed_blocks[2].position[0] - 1, proposed_blocks[2].position[1] + 1];
-                proposed_blocks[3].position = [proposed_blocks[3].position[0] - 2, proposed_blocks[3].position[1]];
-                if (this.makeMove(proposed_blocks)) {
-                    this.activeShape.status++;
-                    return true;
-                }
-            } else if (this.activeShape.status == 2) {
-                proposed_blocks[0].position = [proposed_blocks[0].position[0] - 1, proposed_blocks[0].position[1] + 1];
-                proposed_blocks[2].position = [proposed_blocks[2].position[0] - 1, proposed_blocks[2].position[1] - 1];
-                proposed_blocks[3].position = [proposed_blocks[3].position[0], proposed_blocks[3].position[1] - 2];
-                if (this.makeMove(proposed_blocks)) {
-                    this.activeShape.status++;
-                    return true;
-                }
-            } else if (this.activeShape.status == 3) {
-                proposed_blocks[0].position = [proposed_blocks[0].position[0] - 1, proposed_blocks[0].position[1]];
-                proposed_blocks[1].position = [proposed_blocks[1].position[0], proposed_blocks[1].position[1] + 1];
-                proposed_blocks[2].position = [proposed_blocks[2].position[0] + 1, proposed_blocks[2].position[1]];
-                proposed_blocks[3].position = [proposed_blocks[3].position[0] + 2, proposed_blocks[3].position[1] + 1];
-                if (this.makeMove(proposed_blocks)) {
-                    this.activeShape.status = 0;
-                    return true;
-                }
-            }
+            sRotation(proposed_blocks);
+            return true;
         }
-
 
         if (this.activeShape.blocks[0].srcImg == pink_sq) { // Z block rotation
-            if (this.activeShape.status == 0) {
-                proposed_blocks[0].position = [proposed_blocks[0].position[0] + 2, proposed_blocks[0].position[1] - 1];
-                proposed_blocks[1].position = [proposed_blocks[1].position[0] + 1, proposed_blocks[1].position[1]];
-                proposed_blocks[2].position = [proposed_blocks[2].position[0], proposed_blocks[2].position[1] - 1];
-                proposed_blocks[3].position = [proposed_blocks[3].position[0] - 1, proposed_blocks[3].position[1]];
-                if (this.makeMove(proposed_blocks)) {
-                    this.activeShape.status++;
-                    return true;
-                }
-            } else if (this.activeShape.status == 1) {
-                proposed_blocks[0].position = [proposed_blocks[0].position[0], proposed_blocks[0].position[1] + 2];
-                proposed_blocks[1].position = [proposed_blocks[1].position[0] - 1, proposed_blocks[1].position[1] + 1];
-                proposed_blocks[3].position = [proposed_blocks[3].position[0] - 1, proposed_blocks[3].position[1] - 1];
-                if (this.makeMove(proposed_blocks)) {
-                    this.activeShape.status++;
-                    return true;
-                }
-            } else if (this.activeShape.status == 2) {
-                proposed_blocks[0].position = [proposed_blocks[0].position[0] - 2, proposed_blocks[0].position[1]];
-                proposed_blocks[1].position = [proposed_blocks[1].position[0] - 1, proposed_blocks[1].position[1] - 1];
-                proposed_blocks[3].position = [proposed_blocks[3].position[0] + 1, proposed_blocks[3].position[1] - 1];
-                if (this.makeMove(proposed_blocks)) {
-                    this.activeShape.status++;
-                    return true;
-                }
-            } else if (this.activeShape.status == 3) {
-                proposed_blocks[0].position = [proposed_blocks[0].position[0], proposed_blocks[0].position[1] - 1];
-                proposed_blocks[1].position = [proposed_blocks[1].position[0] + 1, proposed_blocks[1].position[1]];
-                proposed_blocks[2].position = [proposed_blocks[2].position[0], proposed_blocks[2].position[1] + 1];
-                proposed_blocks[3].position = [proposed_blocks[3].position[0] + 1, proposed_blocks[3].position[1] + 2];
-                if (this.makeMove(proposed_blocks)) {
-                    this.activeShape.status = 0;
-                    return true;
-                }
-            }
+            zRotation(proposed_blocks);
+            return true;
         }
-
 
         if (this.activeShape.blocks[0].srcImg == lightblue_sq) { // Line rotation
-            if (this.activeShape.status == 0) {
-                proposed_blocks[0].position = [proposed_blocks[0].position[0] + 1, proposed_blocks[0].position[1] - 3];
-                proposed_blocks[1].position = [proposed_blocks[1].position[0], proposed_blocks[1].position[1] - 2];
-                proposed_blocks[2].position = [proposed_blocks[2].position[0] - 1, proposed_blocks[2].position[1] - 1];
-                proposed_blocks[3].position = [proposed_blocks[3].position[0] - 2, proposed_blocks[3].position[1]];
-                if (this.makeMove(proposed_blocks)) {
-                    this.activeShape.status++;
-                    return true;
-                }
-            } else if (this.activeShape.status == 1) {
-                proposed_blocks[0].position = [proposed_blocks[0].position[0] + 2, proposed_blocks[0].position[1] + 3];
-                proposed_blocks[1].position = [proposed_blocks[1].position[0] + 1, proposed_blocks[1].position[1] + 2];
-                proposed_blocks[2].position = [proposed_blocks[2].position[0], proposed_blocks[2].position[1] + 1];
-                proposed_blocks[3].position = [proposed_blocks[3].position[0] - 1, proposed_blocks[3].position[1]];
-                if (this.makeMove(proposed_blocks)) {
-                    this.activeShape.status++;
-                    return true;
-                }
-            } else if (this.activeShape.status == 2) {
-                proposed_blocks[0].position = [proposed_blocks[0].position[0] - 1, proposed_blocks[0].position[1]];
-                proposed_blocks[1].position = [proposed_blocks[1].position[0], proposed_blocks[1].position[1] - 1];
-                proposed_blocks[2].position = [proposed_blocks[2].position[0] + 1, proposed_blocks[2].position[1] - 2];
-                proposed_blocks[3].position = [proposed_blocks[3].position[0] + 2, proposed_blocks[3].position[1] - 3];
-                if (this.makeMove(proposed_blocks)) {
-                    this.activeShape.status++;
-                    return true;
-                }
-            } else if (this.activeShape.status == 3) {
-                proposed_blocks[0].position = [proposed_blocks[0].position[0] - 2, proposed_blocks[0].position[1]];
-                proposed_blocks[1].position = [proposed_blocks[1].position[0] - 1, proposed_blocks[1].position[1] + 1];
-                proposed_blocks[2].position = [proposed_blocks[2].position[0], proposed_blocks[2].position[1] + 2];
-                proposed_blocks[3].position = [proposed_blocks[3].position[0] + 1, proposed_blocks[3].position[1] + 3];
-                if (this.makeMove(proposed_blocks)) {
-                    this.activeShape.status = 0;
-                    return true;
-                }
-            }
+            lineRotation(proposed_blocks);
+            return true;
         }
-
 
         if (this.activeShape.blocks[0].srcImg == yellow_sq) { // Box rotation
             return true;
         }
-
 
         return false;
     }
