@@ -204,24 +204,24 @@ class Gameboard {
      */
     rotate() {
         // The relative translation positions for every shape from stage to stage was input manually
-
+        // The same thing is essentially done for every piece
         if (this.activeShape.blocks[0].srcImg == purple_sq) { // T-block rotation
-            if (tRotation()) {
+            if (tRotation()) { // Checks if it can do a regular rotation
                 return true;
-            } else if (this.moveRight()) {
+            } else if (this.moveRight()) { // If not, try a left wall kick
                 if (tRotation()) {
                     return true;
                 } else {
                     this.moveLeft();
                 }
-            } else if (this.moveLeft()) {
+            } else if (this.moveLeft()) { // If not, try a right wall kick
                 if (tRotation()) {
                     return true;
                 } else {
                     this.moveRight();
                 }
             }
-            if (this.moveDown()) {
+            if (this.moveDown()) { // If not, try an up wall kick
                 if (tRotation()) {
                     return true;
                 } else {
@@ -330,6 +330,7 @@ class Gameboard {
             }
         }
 
+        // Line piece must do extra walll kicks because of the extra length
         if (this.activeShape.blocks[0].srcImg == lightblue_sq) { // Line rotation
             if (lineRotation()) {
                 return true;
@@ -358,6 +359,28 @@ class Gameboard {
                     }
                 } else {
                     this.moveRight();
+                }
+            }
+            if (this.moveDown()) {
+                if (lineRotation()) {
+                    return true;
+                } else if (this.moveDown()) {
+                    if (lineRotation()) {
+                        return true;
+                    } else if (this.moveDown()) {
+                        if (lineRotation()) {
+                            return true;
+                        } else {
+                            for (var i = 0; i < 3; i++) {
+                                this.moveUp();
+                            }
+                        }
+                    } else {
+                        this.moveUp();
+                        this.moveUp();
+                    }
+                } else {
+                    this.moveUp();
                 }
             }
         }

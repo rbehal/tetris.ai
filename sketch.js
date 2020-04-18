@@ -92,7 +92,7 @@ function draw() {
 
   // calculateLevel() moves active piece down (speed based on level) and returns level #
   fill(0);
-  // text("Level: " + gameboard.calculateLevel().toString(), 0, 300);
+  text("Level: " + gameboard.calculateLevel().toString(), 0, 300);
   text("Score: " + score.toString(), 0, 350);
 
 }
