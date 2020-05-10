@@ -24,6 +24,13 @@ class Gameboard {
         let placeHolder = new Shapes();
         placeHolder.shape = false;
         this.activeShape = placeHolder; // activeShape holds the Shape object of a falling shape at any given time
+
+        // Neural Network
+        // this.brain = new NeuralNetwork(200, 20, 5); 
+    }
+
+    decide() {
+  
     }
 
     /**
@@ -39,7 +46,8 @@ class Gameboard {
 
             // Updating gameboard, pieces array, and activeShape attribute
             this.gameboard[curr_block.position[0]][curr_block.position[1]] = curr_block;
-            this.pieces.push(curr_block.position);
+       
+            this.pieces.push([curr_block.position[0], curr_block.position[1]]);
         }
         this.activeShape = shape;
     }
@@ -53,7 +61,9 @@ class Gameboard {
             let y_cord = this.pieces[i][1];
             let curr_piece = this.gameboard[x_cord][y_cord];
             imageMode(CORNER);
-            image(curr_piece.srcImg, curr_piece.x, curr_piece.y)
+            if (!(curr_piece === null)) {
+                image(curr_piece.srcImg, curr_piece.x, curr_piece.y)
+            }
         }
     }
 
@@ -66,22 +76,30 @@ class Gameboard {
 
         for (let i = 0; i < this.activeShape.blocks.length; i++) {
             let curr_block = this.activeShape.blocks[i];
-            indices_to_move.push(this.pieces.indexOf(curr_block.position));
+            let blockx = curr_block.position[0];
+            let blocky = curr_block.position[1];
+            for (let j = 0; j < this.pieces.length; j++) {
+                if (this.pieces[j][0] === blockx && this.pieces[j][1] === blocky) {
+                    indices_to_move.push(j);
+                    break;
+                }
+            }
         }
 
         indices_to_move = indices_to_move.reverse(); // Not 100% sure this is necessary anymore
 
         for (let i = 0; i < indices_to_move.length; i++) {
             let index = indices_to_move[i];
+            let x_cord;
+            let y_cord;
 
-            let x_cord = this.pieces[index][0];
-            let y_cord = this.pieces[index][1];
+            x_cord = this.pieces[index][0];
+            y_cord = this.pieces[index][1];
 
             // Removes current activeShape pieces from the gameboard and active pieces array.
             this.gameboard[x_cord][y_cord] = null;
             this.pieces.splice(index, 1);
-        }
-
+        }   
         // Update activeShape blocks attribute and adds new shape (blocks that make it up) to the board.
         this.activeShape.blocks = blocks;
         this.addShape(this.activeShape);
@@ -423,7 +441,6 @@ class Gameboard {
                 full_lines.push(parseInt(row[0]));
             }
         });
-
         for (var i = 0; i < full_lines.length; i++) { // Deletes all the blocks in the full lines
             let full_row = full_lines[i];
             for (var j = 0; j < this.gameboard.length; j++) {
@@ -461,8 +478,7 @@ class Gameboard {
     deleteLine(full_row) { 
         for (var i = 0; i < this.gameboard.length; i++) {
             let curr_block = this.gameboard[i][full_row];
-
-            this.pieces.splice(this.pieces.indexOf(curr_block.position), 1);
+            this.splicePieces(curr_block.position);
             this.gameboard[i][full_row] = null;
         }
     }
@@ -492,7 +508,7 @@ class Gameboard {
                     if (curr_block != null) {
 
                         // Removing current position from pieces array
-                        this.pieces.splice(this.pieces.indexOf(curr_block.position), 1); 
+                        this.splicePieces(curr_block.position);
 
                         // Updating block object with new position
                         curr_block.position = [j, i + change];
@@ -500,7 +516,7 @@ class Gameboard {
                         curr_block.y = curr_block.position[1] * 32 + this.initial[1];
                                         
                         // Updating new position in the pieces array and the gameboard
-                        this.pieces.push(curr_block.position);
+                        this.pieces.push([curr_block.position[0], curr_block.position[1]]);
                         this.gameboard[j][i + change] = curr_block;
                     } else {
                         this.gameboard[j][i + change] = null;
@@ -637,7 +653,7 @@ class Gameboard {
         for (let i = 0; i < this.activeShape.blocks.length; i++) {
             let curr_block = this.activeShape.blocks[i]; 
 
-            this.pieces.splice(this.pieces.indexOf(curr_block.position), 1);                           
+            this.splicePieces(curr_block.position);                          
             this.gameboard[curr_block.position[0]][curr_block.position[1]] = null;
         }
 
@@ -659,93 +675,75 @@ class Gameboard {
     calculateLevel() {
         if (lines_cleared < 10) {
             if (frames == 53) {
-                frames = 0;
-                this.moveDown(); 
+                this.update();
             }
         } else if (lines_cleared < 20) {
             if (frames == 49) {
-                frames = 0;
-                this.moveDown(); 
+                this.update();
             }
         } else if (lines_cleared < 30) {
             if (frames == 45) {
-                frames = 0;
-                this.moveDown(); 
+                this.update();
             }
         } else if (lines_cleared < 40) {
             if (frames == 41) {
-                frames = 0;
-                this.moveDown(); 
+                this.update();
             }
         } else if (lines_cleared < 50) {
             if (frames == 37) {
-                frames = 0;
-                this.moveDown(); 
+                this.update();
             }
         } else if (lines_cleared < 60) {
             if (frames == 33) {
-                frames = 0;
-                this.moveDown(); 
+                this.update();
             }
         } else if (lines_cleared < 70) {
             if (frames == 28) {
-                frames = 0;
-                this.moveDown(); 
+                this.update();
             }
         } else if (lines_cleared < 80) {
             if (frames == 22) {
-                frames = 0;
-                this.moveDown(); 
+                this.update();
             }
         } else if (lines_cleared < 90) {
             if (frames == 17) {
-                frames = 0;
-                this.moveDown(); 
+                this.update();
             }
         } else if (lines_cleared < 100) {
             if (frames == 11) {
-                frames = 0;
-                this.moveDown(); 
+                this.update();
             }
         } else if (lines_cleared < 110) {
             if (frames == 10) {
-                frames = 0;
-                this.moveDown(); 
+                this.update();
             }
         } else if (lines_cleared < 120) {
             if (frames == 9) {
-                frames = 0;
-                this.moveDown(); 
+                this.update();
             }
         } else if (lines_cleared < 130) {
             if (frames == 8) {
-                frames = 0;
-                this.moveDown(); 
+                this.update();
             }
         } else if (lines_cleared < 140) {
             if (frames == 7) {
-                frames = 0;
-                this.moveDown(); 
+                this.update();
             }
         } else if (lines_cleared < 160) {
             if (frames == 6) {
-                frames = 0;
-                this.moveDown(); 
+                this.update(); 
             }
         } else if (lines_cleared < 180) {
             if (frames == 5) {
-                frames = 0;
-                this.moveDown(); 
+                this.update();
             }
         } else if (lines_cleared < 200) { 
             if (frames == 4) {
-                frames = 0;
-                this.moveDown(); 
+                this.update();
             }
         } else {
             if (frames == 3) {
-                frames = 0;
-                this.moveDown();
+                this.update();
             }
         }
 
@@ -758,6 +756,29 @@ class Gameboard {
         return level;
     }
 
+    /**
+     * Helper function for calculateLevel()
+     */
+    update() {
+        frames = 0;
+        this.moveDown();
+        this.decide();
+    }
 
+    /**
+     * Helper function to splice pieces
+     * @param {Integer} position [x_cord, y_cord] Integer array with x_cord and y_cord of block needed to remove
+     */
+    splicePieces(position) {
+        let xPos = position[0];
+        let yPos = position[1];
+
+        for (let k = 0; k < this.pieces.length; k++) {
+            if (this.pieces[k][0] === xPos && this.pieces[k][1] === yPos) {
+                this.pieces.splice(k, 1);
+                return;
+            }
+        }
+    }
 
 }

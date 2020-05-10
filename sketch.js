@@ -36,6 +36,7 @@ var Box_img;
 var hold = [null, null, null]; // hold[0] represents the image object in hold. hold[1] represents the # corresponding the shape. hold[2] checks for double shifting.
 
 
+
 /**
  * Setup function runs once when the page is loaded. Loads images, creates canvas and gameboard, and chooses the first few shapes.
  */
@@ -56,7 +57,6 @@ function setup() {
  */
 function draw() {
   background(255);
-
   // Displays gameboard background.
   imageMode(CORNER);
   image(gameboard.gameboard_img, 20, 20); 
@@ -94,22 +94,13 @@ function draw() {
   fill(0);
   text("Level: " + gameboard.calculateLevel().toString(), 0, 300);
   text("Score: " + score.toString(), 0, 350);
-
 }
 
 /**
  * Runs once when the mouse is clicked.
  */
 function mouseClicked() { // For testing
-  // this.gameboard.moveDown();
-  // this.gameboard.moveRight();
-  // gameboard.rotate(gameboard.activeShape);
-  // gameboard.clearLine();
-  // noLoop();
-  // gameboard.deleteHold();
-  // lines_cleared += 10;
-  // frames = 0;
-  // this.gameboard.moveUp();
+  // console.log(gameboard.pieces);
 }
 
 /**
@@ -140,6 +131,12 @@ function keyPressed() {
   }
   if (keyCode == 16) { // ASCII for shift
     gameboard.hold();
+  }
+  if (keyCode == 83) { // ASCII for s
+    saveBoard();
+  }
+  if (keyCode == 82) { // ASCII for r
+    reset();
   }
 }
 
@@ -246,7 +243,9 @@ function preloadImages() {
   Line_img = loadImage("assets/Line_piece.png");
   Box_img = loadImage("assets/Box_piece.png");
 
-  // Necessary for the NEXT images
+  // Necessary for the NEXT images //
+
+  // First next
   T_img0 = loadImage("assets/T_piece.png", img => {
     img.resize(0, 45);
   });
@@ -269,6 +268,7 @@ function preloadImages() {
     img.resize(0, 45);
   }); 
 
+  // Second next
   T_img1 = loadImage("assets/T_piece.png", img => {
     img.resize(0, 40);
   });
@@ -291,6 +291,7 @@ function preloadImages() {
     img.resize(0, 40);
   });
 
+  // All other nexts
   T_img2 = loadImage("assets/T_piece.png", img => {
     img.resize(0, 35);
   });

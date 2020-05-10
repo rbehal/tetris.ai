@@ -1,9 +1,15 @@
 class Shapes {
 
-  constructor() {
-    this.blocks = []; // Array of block objects that make up the shape
-    this.shape = true; // If it is still an "in-play" shape, i.e. not static, this.shape = true
-    this.status = 0; // Representing the current state of rotation. 0 being the state it spawned in.
+  constructor(blocks, shape, status) {
+    if (blocks == undefined) {
+      this.blocks = []; // Array of block objects that make up the shape
+      this.shape = true; // If it is still an "in-play" shape, i.e. not static, this.shape = true
+      this.status = 0; // Representing the current state of rotation. 0 being the state it spawned in
+    } else {
+      this.blocks = blocks;
+      this.shape = shape;
+      this.status = status;
+    }
   }
 
   // Spawn functions spawn the respective shapes to the board. Return true if possible, stops the game and false if not. (game over)
@@ -115,6 +121,10 @@ class Shapes {
       blocks_copy.push(new_block);
     }
     return blocks_copy;
+  }
+
+  copy() {
+    return new Shapes(this.blocks, this.shape, this.status);
   }
 
 }
