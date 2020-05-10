@@ -44,18 +44,20 @@ var preMoveLevel;
 var preMoveScore;
 var preMoveLinesCleared;
 
-
+/**
+ * Saves current state of the board in an object and returns that object.
+ */
 function saveBoard() {
-    preMoveGameboard = returnGameboard(gameboard.gameboard);
-    preMovePieces = returnPieces(gameboard.pieces);
+    preMoveGameboard = copyGameboard(gameboard.gameboard);
+    preMovePieces = copyPieces(gameboard.pieces);
     preMoveActiveShape = gameboard.activeShape.copy();
     preMoveRandShapes = Array.from(rand_shapes);
     preMoveScore = score;
     preMoveLevel = level;
     preMoveLinesCleared = lines_cleared;
 
-    var move = {gameboard: returnGameboard(gameboard.gameboard), 
-        pieces: returnPieces(preMovePieces),
+    var move = {gameboard: copyGameboard(gameboard.gameboard), 
+        pieces: copyPieces(preMovePieces),
         activeShape: gameboard.activeShape.copy(), 
         rand_shapes: Array.from(rand_shapes),
         score: score,
@@ -63,23 +65,26 @@ function saveBoard() {
         lines_cleared: lines_cleared
         // fitness: calculateFitness()
     };
-    // availableMoves.push(move);
     return move;
 }
 
+/**
+ * Resets the board to a passed game state.
+ * @param move Formerly saved game state returned with saveBoard().
+ */
 function reset(move) {
     noLoop()
     if (move === undefined) {
-        gameboard.gameboard = returnGameboard(preMoveGameboard);
-        gameboard.pieces = returnPieces(preMovePieces);
+        gameboard.gameboard = copyGameboard(preMoveGameboard);
+        gameboard.pieces = copyPieces(preMovePieces);
         gameboard.activeShape = preMoveActiveShape.copy();
         rand_shapes = Array.from(preMoveRandShapes);
         score = preMoveScore;
         level = preMoveLevel;
         lines_cleared = preMoveLinesCleared;
     } else {
-        gameboard.gameboard = returnGameboard(move.gameboard);
-        gameboard.pieces = returnPieces(move.pieces);
+        gameboard.gameboard = copyGameboard(move.gameboard);
+        gameboard.pieces = copyPieces(move.pieces);
         gameboard.activeShape = move.activeShape.copy();
         rand_shapes = Array.from(move.rand_shapes);
         score = move.score;
@@ -109,7 +114,7 @@ function testMove() {
         gameboard.rotate(); 
         startPosition = saveBoard();
     }
-    
+
 }
 
 
@@ -117,8 +122,11 @@ function testMove() {
 
 
 
-
-function returnGameboard(gameboard) {
+/**
+ * Helper function that returns a deep copy of the gameboard array.
+ * @param gameboard Gameboard array
+ */
+function copyGameboard(gameboard) {
     newGameboard = [];
     gameboard.forEach(column => {
         var newColumn = [];
@@ -134,8 +142,11 @@ function returnGameboard(gameboard) {
     return newGameboard;
 }
 
-
-function returnPieces(pieces) {
+/**
+ * Helper functoin that returns a deep copy of the pieces array
+ * @param pieces Pieces array
+ */
+function copyPieces(pieces) {
     var newPieces = [];
     pieces.forEach(position => {
         var newPosition = [];
