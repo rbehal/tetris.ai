@@ -124,7 +124,11 @@ class Shapes {
   }
 
   copy() {
-    return new Shapes(this.blocks, this.shape, this.status);
+    let new_blocks = [];
+    this.blocks.forEach(block => {
+      new_blocks.push(block.copy());
+    });
+    return new Shapes(new_blocks, this.shape, this.status);
   }
 
 }

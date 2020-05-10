@@ -101,6 +101,7 @@ function draw() {
  */
 function mouseClicked() { // For testing
   // console.log(gameboard.pieces);
+  testMove();
 }
 
 /**
