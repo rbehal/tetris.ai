@@ -428,19 +428,8 @@ class Gameboard {
      * Clears all full lines on the board.
      */
     clearLine() {
-        let row_status = {}; // Object that holds the row indices as keys and the number of blocks in the row as an entry
-        let full_lines = []; // Holds the indices of all of the full rows
+        let full_lines = getFullLines(this.pieces);
 
-        this.pieces.forEach(function (position) { // Counts the number of blocks in each row.
-            let curr_row = position[1];
-            row_status[curr_row] = (row_status[curr_row] || 0) + 1;
-        });
-
-        Object.entries(row_status).forEach(function (row) { // Finds the lines that are full
-            if (row[1] == 10) {
-                full_lines.push(parseInt(row[0]));
-            }
-        });
         for (var i = 0; i < full_lines.length; i++) { // Deletes all the blocks in the full lines
             let full_row = full_lines[i];
             for (var j = 0; j < this.gameboard.length; j++) {

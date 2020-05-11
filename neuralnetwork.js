@@ -35,7 +35,6 @@ class NeuralNetwork {
     }
 }
 
-var availableMoves = []; 
 var preMoveGameboard;
 var preMovePieces;
 var preMoveActiveShape;
@@ -43,6 +42,7 @@ var preMoveRandShapes;
 var preMoveLevel;
 var preMoveScore;
 var preMoveLinesCleared;
+var testMove; 
 
 /**
  * Saves current state of the board in an object and returns that object.
@@ -56,15 +56,16 @@ function saveBoard() {
     preMoveLevel = level;
     preMoveLinesCleared = lines_cleared;
 
-    var move = {gameboard: copyGameboard(gameboard.gameboard), 
+    var move = {   
+        gameboard: copyGameboard(gameboard.gameboard), 
         pieces: copyPieces(preMovePieces),
         activeShape: gameboard.activeShape.copy(), 
         rand_shapes: Array.from(rand_shapes),
         score: score,
         level: level,
         lines_cleared: lines_cleared
-        // fitness: calculateFitness()
     };
+    testMove = move; 
     return move;
 }
 
@@ -94,9 +95,12 @@ function reset(move) {
     loop();
 }
 
-
-function testMove() {
-
+/**
+ * Tests all possible moves and returns an array of them.
+ * @return possibleMoves Array of of all possible moves .
+ */
+function possibleMoves() {
+    var possibleMovesArr = []; 
     var startPosition = saveBoard(); // Saves very start position
 
     for (var rotationState = 0; rotationState < 4; rotationState++) {
@@ -108,19 +112,17 @@ function testMove() {
             }
             while(gameboard.moveDown()) { // Moves all the way down
             }
-            availableMoves.push(saveBoard());
+            var currentState = saveBoard();
+            currentState["rowsCleared"] = currentState.lines_cleared - startPosition.lines_cleared;
+            possibleMovesArr.push(saveBoard());
             reset(startPosition);
         }
         gameboard.rotate(); 
         startPosition = saveBoard();
     }
 
+    return possibleMovesArr; 
 }
-
-
-
-
-
 
 /**
  * Helper function that returns a deep copy of the gameboard array.
@@ -143,7 +145,7 @@ function copyGameboard(gameboard) {
 }
 
 /**
- * Helper functoin that returns a deep copy of the pieces array
+ * Helper functipn that returns a deep copy of the pieces array
  * @param pieces Pieces array
  */
 function copyPieces(pieces) {
@@ -156,4 +158,81 @@ function copyPieces(pieces) {
         newPieces.push(newPosition);
     });
     return newPieces;
+}
+
+/// Properties of a move ///
+
+
+function getFullLines(pieces) {
+    let row_status = {}; // Object that holds the row indices as keys and the number of blocks in the row as an entry
+    let full_lines = []; // Holds the indices of all of the full rows
+
+    pieces.forEach(function (position) { // Counts the number of blocks in each row.
+        let curr_row = position[1];
+        row_status[curr_row] = (row_status[curr_row] || 0) + 1;
+    });
+
+    Object.entries(row_status).forEach(function (row) { // Finds the lines that are full
+        if (row[1] == 10) {
+            full_lines.push(parseInt(row[0]));
+        }
+    });
+
+    return full_lines; 
+}
+
+function getMoveRating(move) {
+
+    var rowsCleared = getFullLines(move.pieces).length;
+
+    // Getting array of column heights to get other rating parameters
+    var columnHeights = []
+    var holes = 0; 
+    move.gameboard.forEach(function (column) {
+        var colHeight = 0;
+        var blockAbove = false;
+
+        for (var yIndex = 0; yIndex < 20; yIndex++) {
+            if (column[yIndex] != null && blockAbove === false) {
+                colHeight = yIndex;
+                blockAbove = true; 
+            } else if (column[yIndex] === null && blockAbove === true) {
+                holes++; 
+            }
+        }
+
+        columnHeights.push(colHeight);
+    });
+
+    // Getting weighted height
+    var highestColumn = Math.max.apply(null, columnHeights);
+    var lowestColumn = Math.min.apply(null, columnHeights);
+    var weightedHeight = Math.pow(highestColumn, 1.5);
+
+
+    // Getting cumulative heights
+    var cumulativeHeight = 0; 
+    columnHeights.forEach(function (height) {
+        cumulativeHeight += height;
+    });
+
+    // Getting relative height
+    var relativeHeight = highestColumn - lowestColumn;
+
+    // Getting roughness
+    var roughness = 0;
+    for (var i = 0; i < columnHeights.length - 1; i++) {
+        roughness += Math.abs(columnHeights[i] - columnHeights[i + 1]); 
+    }
+
+    var rating = {   
+        rowsCleared: rowsCleared, 
+        weightedHeight: weightedHeight,
+        cumulativeHeight: cumulativeHeight, 
+        relativeHeight: relativeHeight,
+        holes: holes,
+        roughness: roughness
+    };
+
+    return rating; 
 }

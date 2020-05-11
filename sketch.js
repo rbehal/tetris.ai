@@ -95,13 +95,12 @@ function draw() {
   text("Level: " + gameboard.calculateLevel().toString(), 0, 300);
   text("Score: " + score.toString(), 0, 350);
 }
-
+var possible;
 /**
  * Runs once when the mouse is clicked.
  */
 function mouseClicked() { // For testing
-  // console.log(gameboard.pieces);
-  testMove();
+
 }
 
 /**
