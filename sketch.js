@@ -74,7 +74,7 @@ function setup() {
   currGeneration = createGeneration(); 
   currGenome = currGeneration.pop(); 
 
-  frameRate(10); 
+  frameRate(20); 
 }
 
 /**
@@ -120,6 +120,7 @@ function draw() {
   fill(0);
   text("Level: " + gameboard.calculateLevel().toString(), 0, 300);
   text("Score: " + score.toString(), 0, 350);
+  text("Generation " + generationNum.toString(), 0, 400);
 }
 /**
  * Runs once when the mouse is clicked.

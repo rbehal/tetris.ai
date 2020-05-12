@@ -8,12 +8,12 @@ class NeuralNetwork {
  * @returns {Array} Generation array containing the genome weights. 
  */
 function createGeneration(parents) {
+    generationNum++; 
+
+    var generation = []; 
+    var generationSize = 5; 
+
     if (parents === undefined) {
-        generationNum++; 
-
-        var generation = []; 
-        var generationSize = 2; 
-
         for (var i = 0; i < generationSize; i++) {
             var genomeWeights = {
                 rowsCleared: Math.random() - 0.5, 
@@ -23,6 +23,43 @@ function createGeneration(parents) {
                 holes: Math.random() - 0.5,
                 roughness: Math.random() - 0.5
             }
+            generation.push(genomeWeights);
+        }
+    } else {
+        var mutationRate = 0.2;
+        var mutationProbability = 0.2;
+
+        var baseGenome = crossBreed(parents); 
+
+        for (var i = 0; i < generationSize; i++) {
+            var genomeWeights = {
+                rowsCleared: baseGenome.rowsCleared, 
+                weightedHeight: baseGenome.weightedHeight,
+                cumulativeHeight: baseGenome.cumulativeHeight, 
+                relativeHeight: baseGenome.relativeHeight,
+                holes: baseGenome.holes,
+                roughness: baseGenome.roughness
+            }
+
+            if (Math.random() < mutationProbability) {
+                genomeWeights.rowsCleared = baseGenome.rowsCleared +  (((2*Math.random()) - 1) * mutationRate);
+            } 
+            if (Math.random() < mutationProbability) {
+                genomeWeights.weightedHeight = baseGenome.weightedHeight +  (((2*Math.random()) - 1) * mutationRate);
+            } 
+            if (Math.random() < mutationProbability) {
+                genomeWeights.cumulativeHeight = baseGenome.cumulativeHeight +  (((2*Math.random()) - 1) * mutationRate);
+            } 
+            if (Math.random() < mutationProbability) {
+                genomeWeights.relativeHeight = baseGenome.relativeHeight +  (((2*Math.random()) - 1) * mutationRate);
+            } 
+            if (Math.random() < mutationProbability) {
+                genomeWeights.holes = baseGenome.holes +  (((2*Math.random()) - 1) * mutationRate);
+            } 
+            if (Math.random() < mutationProbability) {
+                genomeWeights.roughness = baseGenome.roughness +  (((2*Math.random()) - 1) * mutationRate);
+            } 
+
             generation.push(genomeWeights);
         }
     }
@@ -40,8 +77,6 @@ function terminateGenome() {
         randomShape(rand_shapes.shift());
         rand_shapes.push(randomNumber());
     } else {
-        var generation = "Generation " + generationNum.toString();
-
         currGenerationDeaths.push(currGenome); 
 
         currGenerationDeaths.forEach (genome => {
@@ -60,8 +95,23 @@ function terminateGenome() {
         currGenerationDeaths = [];
 
         gameOver = false; 
-        currGeneration = createGeneration();
+        currGeneration = createGeneration([bestGenome, secondBestGenome]);
     }
+}
+
+function crossBreed(parents) {
+    var randomParent = function () {
+        return Math.floor(Math.random() * 2); 
+    }
+    var genomeWeights = {
+        rowsCleared: parents[randomParent()].rowsCleared, 
+        weightedHeight: parents[randomParent()].weightedHeight,
+        cumulativeHeight: parents[randomParent()].cumulativeHeight, 
+        relativeHeight: parents[randomParent()].relativeHeight,
+        holes: parents[randomParent()].holes,
+        roughness: parents[randomParent()].roughness
+    }
+    return genomeWeights; 
 }
 
 
