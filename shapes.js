@@ -20,7 +20,7 @@ class Shapes {
       gameboard.addShape(this);
       return true;
     } else {
-      this.endGame();
+      return this.endGame();
     }
   }
 
@@ -31,7 +31,7 @@ class Shapes {
       gameboard.addShape(this);
       return true;
     } else {
-      this.endGame();
+      return this.endGame();
     }
   }
 
@@ -42,7 +42,7 @@ class Shapes {
       gameboard.addShape(this);
       return true;
     } else {
-      this.endGame();
+      return this.endGame();
     }
   }
 
@@ -53,7 +53,7 @@ class Shapes {
       gameboard.addShape(this);
       return true;
     } else {
-      this.endGame();
+      return this.endGame();
     }
   }
 
@@ -64,7 +64,7 @@ class Shapes {
       gameboard.addShape(this);
       return true;
     } else {
-      this.endGame();
+      return this.endGame();
     }
   }
 
@@ -75,7 +75,7 @@ class Shapes {
       gameboard.addShape(this);
       return true;
     } else {
-      this.endGame();
+      return this.endGame();
     }
   }
 
@@ -86,7 +86,7 @@ class Shapes {
       gameboard.addShape(this);
       return true;
     } else {
-      this.endGame();
+      return this.endGame();
     }
   }
 
@@ -125,9 +125,10 @@ class Shapes {
   }
 
   endGame() {
-    gameOver = true; 
     noLoop();
-    return false; 
+    gameOver = true; 
+    terminateGenome();
+    return false;
   }
 
 }

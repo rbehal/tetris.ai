@@ -24,13 +24,6 @@ class Gameboard {
         let placeHolder = new Shapes();
         placeHolder.shape = false;
         this.activeShape = placeHolder; // activeShape holds the Shape object of a falling shape at any given time
-
-        // Neural Network
-        // this.brain = new NeuralNetwork(200, 20, 5); 
-    }
-
-    decide() {
-  
     }
 
     /**
@@ -751,7 +744,6 @@ class Gameboard {
     update() {
         frames = 0;
         this.moveDown();
-        this.decide();
     }
 
     /**

@@ -35,7 +35,16 @@ var Line_img;
 var Box_img;
 
 var hold = [null, null, null]; // hold[0] represents the image object in hold. hold[1] represents the # corresponding the shape. hold[2] checks for double shifting.
-var generation = [];
+
+var startBoard;
+var generationNum = 0;
+var allGenerations = {};
+var currGeneration = [];
+var currGenome = null; 
+var currGenerationDeaths = [];
+var bestGenome = {fitness: 1};
+var secondBestGenome = {fitness: 0};
+
 
 
 /**
@@ -51,13 +60,28 @@ function setup() {
   for (let i = 0; i < 5; i++) {
     rand_shapes.push(randomNumber());
   }
-  generation = createGeneration(); 
+
+  startBoard = {   
+    gameboard: copyGameboard(gameboard.gameboard), 
+    pieces: copyPieces(gameboard.pieces),
+    activeShape: gameboard.activeShape.copy(), 
+    rand_shapes: Array.from(rand_shapes),
+    score: score,
+    level: level,
+    lines_cleared: lines_cleared
+  };
+
+  currGeneration = createGeneration(); 
+  currGenome = currGeneration.pop(); 
+
+  frameRate(10); 
 }
 
 /**
  * Draw function runs 60 times per seconds. Serves to render and animate everything on the screen.
  */
 function draw() {
+
   background(255);
   // Displays gameboard background.
   imageMode(CORNER);
@@ -103,6 +127,8 @@ function draw() {
 function mouseClicked() { // For testing
   // console.log(gameboard.gameboard)
   // noLoop();
+  console.log(bestGenome);
+  console.log(secondBestGenome);
 }
 
 /**
@@ -216,8 +242,8 @@ function randomShape(rand_shape) {
     activeShape.spawnLine();
   } 
   if (!gameOver) {
-    // makeBestMove();
-  }
+    makeBestMove(currGenome);
+  } 
 }
 
 /**

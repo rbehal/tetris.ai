@@ -1,64 +1,68 @@
 class NeuralNetwork {
-    constructor(i, h, o) {
-        this.input_nodes = i;
-        this.hidden_nodes =  h;
-        this.output_nodes = o;
 
-        this.createModel();
-    }
-
-    createModel() {
-        this.model = tf.sequential(); 
-
-        const hidden = tf.layers.dense({
-            units: this.hidden_nodes,
-            inputShape: [this.input_nodes],
-            activation: 'sigmoid'
-        });
-
-        this.model.add(hidden);
-
-        const output = tf.layers.dense({
-            units: this.output_nodes,
-            activation: 'softmax'
-        });
-
-        this.model.add(output);
-    }
-
-    predict(input_arr) {
-        const input_tensor = tf.tensor2d([input_arr]);
-        const output_tensor = this.model.predict(input_tensor); 
-
-        const output_arr = output_tensor.dataSync();
-        return output_arr;
-    }
 }
 
 /**
  * Creates generations of a specified size by assigning random weights to an object. 
+ * @param {Array} parents Array containing genome weights. W
  * @returns {Array} Generation array containing the genome weights. 
  */
-function createGeneration() {
-    var generation = []; 
-    var generationSize = 5; 
+function createGeneration(parents) {
+    if (parents === undefined) {
+        generationNum++; 
 
-    for (var i = 0; i < generationSize; i++) {
-        var genomeWeights = {
-            rowsCleared: Math.random() - 0.5, 
-            weightedHeight: Math.random() - 0.5,
-            cumulativeHeight: Math.random() - 0.5, 
-            relativeHeight: Math.random() - 0.5,
-            holes: Math.random() - 0.5,
-            roughness: Math.random() - 0.5
+        var generation = []; 
+        var generationSize = 2; 
+
+        for (var i = 0; i < generationSize; i++) {
+            var genomeWeights = {
+                rowsCleared: Math.random() - 0.5, 
+                weightedHeight: Math.random() - 0.5,
+                cumulativeHeight: Math.random() - 0.5, 
+                relativeHeight: Math.random() - 0.5,
+                holes: Math.random() - 0.5,
+                roughness: Math.random() - 0.5
+            }
+            generation.push(genomeWeights);
         }
-        generation.push(genomeWeights);
     }
 
     return generation; 
 }
 
+function terminateGenome() {
+    currGenome['fitness'] = score; 
+    if (currGeneration.length != 0) {
+        currGenerationDeaths.push(currGenome); 
+        currGenome = currGeneration.pop(); 
+        gameOver = false; 
+        reset(startBoard);
+        randomShape(rand_shapes.shift());
+        rand_shapes.push(randomNumber());
+    } else {
+        var generation = "Generation " + generationNum.toString();
 
+        currGenerationDeaths.push(currGenome); 
+
+        currGenerationDeaths.forEach (genome => {
+            if (genome.fitness > secondBestGenome.fitness) {
+                if (genome.fitness > bestGenome.fitness) {
+                    if (secondBestGenome != bestGenome) {
+                        secondBestGenome = bestGenome;
+                    } 
+                    bestGenome = genome; 
+                } else {
+                    secondBestGenome = genome;
+                }
+            }
+        });
+
+        currGenerationDeaths = [];
+
+        gameOver = false; 
+        currGeneration = createGeneration();
+    }
+}
 
 
 
@@ -102,7 +106,6 @@ function saveBoard() {
  * @param move Formerly saved game state returned with saveBoard().
  */
 function reset(move) {
-    noLoop()
     if (move === undefined) {
         gameboard.gameboard = copyGameboard(preMoveGameboard);
         gameboard.pieces = copyPieces(preMovePieces);
