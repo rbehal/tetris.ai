@@ -130,7 +130,6 @@ function keyPressed() {
     while (swtch) {
       swtch = gameboard.moveDown(true, addScore = true); // Moves down until it can't anymore
     }
-    // makeBestMove();
   }
   if (keyCode == 16) { // ASCII for shift
     gameboard.hold();
@@ -217,7 +216,7 @@ function randomShape(rand_shape) {
     activeShape.spawnLine();
   } 
   if (!gameOver) {
-    makeBestMove();
+    // makeBestMove();
   }
 }
 

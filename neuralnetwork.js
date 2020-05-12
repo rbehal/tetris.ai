@@ -35,6 +35,10 @@ class NeuralNetwork {
     }
 }
 
+/**
+ * Creates generations of a specified size by assigning random weights to an object. 
+ * @returns {Array} Generation array containing the genome weights. 
+ */
 function createGeneration() {
     var generation = []; 
     var generationSize = 5; 
@@ -58,7 +62,7 @@ function createGeneration() {
 
 
 
-
+// FIXME: Can refactor this later, they don't need to be global variables and you take the extra case for this out in reset() too. 
 var preMoveGameboard;
 var preMovePieces;
 var preMoveActiveShape;
@@ -148,6 +152,12 @@ function getPossibleMoves() {
     return possibleMovesArr; 
 }
 
+/**
+ * Returns the best move as calculated by the provided genome.
+ * @param {move} possibleMovesArr Array containing all possible moves. 
+ * @param {genomeWeights} genome Genome that contains all the weights.
+ * @returns {move} Returns the best move.
+ */
 function getBestMove(possibleMovesArr, genome) {
     var maxRating = -9999;
     var bestMove; 
@@ -168,9 +178,12 @@ function getBestMove(possibleMovesArr, genome) {
     return bestMove; 
 }
 
-function makeBestMove() {
+/**
+ * Gets and executes the best possible move based on the provided genome.
+ * @param {genomeWeights} genome Object containing the weights.
+ */
+function makeBestMove(genome) {
     var possibleMoves = getPossibleMoves(); 
-    var genome = generation[0]; 
     var bestMove = getBestMove(possibleMoves, genome); 
 
     reset(bestMove);
@@ -212,6 +225,10 @@ function copyPieces(pieces) {
     return newPieces;
 }
 
+/**
+ * Gets the amount of full lines when provided with a pieces array.
+ * @param {Array} pieces Array of activePieces. 
+ */
 function getFullLines(pieces) {
     let row_status = {}; // Object that holds the row indices as keys and the number of blocks in the row as an entry
     let full_lines = []; // Holds the indices of all of the full rows
@@ -230,6 +247,10 @@ function getFullLines(pieces) {
     return full_lines; 
 }
 
+/**
+ * Gets key performance indicators that the quality of a move is judged on. 
+ * @param {move} move A move object.
+ */
 function getMoveKPIs(move) {
     var rowsCleared = getFullLines(move.pieces).length;
 
