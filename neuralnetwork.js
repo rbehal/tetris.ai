@@ -1,7 +1,3 @@
-class NeuralNetwork {
-
-}
-
 /**
  * Creates generations of a specified size by assigning random weights to an object. 
  * @param {Array} parents Array containing genome weights. W
@@ -11,7 +7,7 @@ function createGeneration(parents) {
     generationNum++; 
 
     var generation = []; 
-    var generationSize = 5; 
+    var generationSize = 10; 
 
     if (parents === undefined) {
         for (var i = 0; i < generationSize; i++) {
@@ -27,7 +23,7 @@ function createGeneration(parents) {
         }
     } else {
         var mutationRate = 0.2;
-        var mutationProbability = 0.2;
+        var mutationProbability = 0.05;
 
         var baseGenome = crossBreed(parents); 
 
@@ -42,22 +38,22 @@ function createGeneration(parents) {
             }
 
             if (Math.random() < mutationProbability) {
-                genomeWeights.rowsCleared = baseGenome.rowsCleared +  (((2*Math.random()) - 1) * mutationRate);
+                genomeWeights.rowsCleared = baseGenome.rowsCleared + (((2*Math.random()) - 1) * mutationRate);
             } 
             if (Math.random() < mutationProbability) {
-                genomeWeights.weightedHeight = baseGenome.weightedHeight +  (((2*Math.random()) - 1) * mutationRate);
+                genomeWeights.weightedHeight = baseGenome.weightedHeight + (((2*Math.random()) - 1) * mutationRate);
             } 
             if (Math.random() < mutationProbability) {
-                genomeWeights.cumulativeHeight = baseGenome.cumulativeHeight +  (((2*Math.random()) - 1) * mutationRate);
+                genomeWeights.cumulativeHeight = baseGenome.cumulativeHeight + (((2*Math.random()) - 1) * mutationRate);
             } 
             if (Math.random() < mutationProbability) {
-                genomeWeights.relativeHeight = baseGenome.relativeHeight +  (((2*Math.random()) - 1) * mutationRate);
+                genomeWeights.relativeHeight = baseGenome.relativeHeight + (((2*Math.random()) - 1) * mutationRate);
             } 
             if (Math.random() < mutationProbability) {
-                genomeWeights.holes = baseGenome.holes +  (((2*Math.random()) - 1) * mutationRate);
+                genomeWeights.holes = baseGenome.holes + (((2*Math.random()) - 1) * mutationRate);
             } 
             if (Math.random() < mutationProbability) {
-                genomeWeights.roughness = baseGenome.roughness +  (((2*Math.random()) - 1) * mutationRate);
+                genomeWeights.roughness = baseGenome.roughness + (((2*Math.random()) - 1) * mutationRate);
             } 
 
             generation.push(genomeWeights);
@@ -74,8 +70,7 @@ function terminateGenome() {
         currGenome = currGeneration.pop(); 
         gameOver = false; 
         reset(startBoard);
-        randomShape(rand_shapes.shift());
-        rand_shapes.push(randomNumber());
+        spawnShape(isRandom = true);
     } else {
         currGenerationDeaths.push(currGenome); 
 
@@ -101,15 +96,15 @@ function terminateGenome() {
 
 function crossBreed(parents) {
     var randomParent = function () {
-        return Math.floor(Math.random() * 2); 
+        return parents[Math.floor(Math.random() * 2)]; 
     }
     var genomeWeights = {
-        rowsCleared: parents[randomParent()].rowsCleared, 
-        weightedHeight: parents[randomParent()].weightedHeight,
-        cumulativeHeight: parents[randomParent()].cumulativeHeight, 
-        relativeHeight: parents[randomParent()].relativeHeight,
-        holes: parents[randomParent()].holes,
-        roughness: parents[randomParent()].roughness
+        rowsCleared: randomParent().rowsCleared, 
+        weightedHeight: randomParent().weightedHeight,
+        cumulativeHeight: randomParent().cumulativeHeight, 
+        relativeHeight: randomParent().relativeHeight,
+        holes: randomParent().holes,
+        roughness: randomParent().roughness
     }
     return genomeWeights; 
 }
@@ -185,7 +180,7 @@ function getPossibleMoves() {
     var startPosition = saveBoard(); // Saves very start position
 
     for (var rotationState = 0; rotationState < 4; rotationState++) {
-        for (var i = 0; i < 9; i++) {
+        for (var i = 0; i < 10; i++) {
             while(gameboard.moveLeft()) { // Moves all the way to the left
             }
             for (var j = 0; j < i; j++) { // Moves incrementally to the right (10 times til the end)

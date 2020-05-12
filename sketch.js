@@ -74,7 +74,7 @@ function setup() {
   currGeneration = createGeneration(); 
   currGenome = currGeneration.pop(); 
 
-  frameRate(20); 
+  // frameRate(30); 
 }
 
 /**
@@ -96,8 +96,7 @@ function draw() {
 
   // Generates new random shape if there is none on the board.
   if (gameboard.activeShape.shape == false) { 
-    randomShape(rand_shapes.shift()); // dequeue
-    rand_shapes.push(randomNumber()); // enqueue
+    spawnShape(rand_shapes);
   }
 
   gameboard.display(); // Renders every active block on the grid.
@@ -128,8 +127,9 @@ function draw() {
 function mouseClicked() { // For testing
   // console.log(gameboard.gameboard)
   // noLoop();
-  console.log(bestGenome);
-  console.log(secondBestGenome);
+  // console.log(bestGenome);
+  // console.log(secondBestGenome);
+
 }
 
 /**
@@ -245,6 +245,17 @@ function randomShape(rand_shape) {
   if (!gameOver) {
     makeBestMove(currGenome);
   } 
+}
+
+function spawnShape(isRandom = false) {
+  if (isRandom) {
+    rand_shapes = []; 
+    for (let i = 0; i < 5; i++) {
+      rand_shapes.push(randomNumber());
+    }
+  }
+  randomShape(rand_shapes.shift()); // dequeue
+  rand_shapes.push(randomNumber()); // enqueue
 }
 
 /**
