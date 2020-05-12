@@ -9,6 +9,7 @@ var keydown = 0;
 var timer = 0;
 var lines_cleared = 0;
 var level = 0;
+var gameOver = false; 
 
 // Variables for running moves on intervals when a key is held down.
 var lKey;
@@ -34,7 +35,7 @@ var Line_img;
 var Box_img;
 
 var hold = [null, null, null]; // hold[0] represents the image object in hold. hold[1] represents the # corresponding the shape. hold[2] checks for double shifting.
-
+var generation = [];
 
 
 /**
@@ -50,6 +51,7 @@ function setup() {
   for (let i = 0; i < 5; i++) {
     rand_shapes.push(randomNumber());
   }
+  generation = createGeneration(); 
 }
 
 /**
@@ -95,12 +97,12 @@ function draw() {
   text("Level: " + gameboard.calculateLevel().toString(), 0, 300);
   text("Score: " + score.toString(), 0, 350);
 }
-var possible;
 /**
  * Runs once when the mouse is clicked.
  */
 function mouseClicked() { // For testing
-
+  // console.log(gameboard.gameboard)
+  // noLoop();
 }
 
 /**
@@ -128,6 +130,7 @@ function keyPressed() {
     while (swtch) {
       swtch = gameboard.moveDown(true, addScore = true); // Moves down until it can't anymore
     }
+    // makeBestMove();
   }
   if (keyCode == 16) { // ASCII for shift
     gameboard.hold();
@@ -137,6 +140,12 @@ function keyPressed() {
   }
   if (keyCode == 82) { // ASCII for r
     reset();
+  }
+  if (keyCode == 78) { // ASCII for n
+    noLoop();
+  }
+  if (keyCode == 76) { // ASCII for n
+    loop();
   }
 }
 
@@ -207,6 +216,9 @@ function randomShape(rand_shape) {
   } else if (rand_shape == 6) {
     activeShape.spawnLine();
   } 
+  if (!gameOver) {
+    makeBestMove();
+  }
 }
 
 /**

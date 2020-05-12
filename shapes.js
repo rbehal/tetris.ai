@@ -20,8 +20,7 @@ class Shapes {
       gameboard.addShape(this);
       return true;
     } else {
-      noLoop();
-      return false;
+      this.endGame();
     }
   }
 
@@ -32,8 +31,7 @@ class Shapes {
       gameboard.addShape(this);
       return true;
     } else {
-      noLoop();
-      return false;
+      this.endGame();
     }
   }
 
@@ -44,8 +42,7 @@ class Shapes {
       gameboard.addShape(this);
       return true;
     } else {
-      noLoop();
-      return false;
+      this.endGame();
     }
   }
 
@@ -56,8 +53,7 @@ class Shapes {
       gameboard.addShape(this);
       return true;
     } else {
-      noLoop();
-      return false;
+      this.endGame();
     }
   }
 
@@ -68,8 +64,7 @@ class Shapes {
       gameboard.addShape(this);
       return true;
     } else {
-      noLoop();
-      return false;
+      this.endGame();
     }
   }
 
@@ -80,8 +75,7 @@ class Shapes {
       gameboard.addShape(this);
       return true;
     } else {
-      noLoop();
-      return false;
+      this.endGame();
     }
   }
 
@@ -92,8 +86,7 @@ class Shapes {
       gameboard.addShape(this);
       return true;
     } else {
-      noLoop();
-      return false;
+      this.endGame();
     }
   }
 
@@ -129,6 +122,12 @@ class Shapes {
       new_blocks.push(block.copy());
     });
     return new Shapes(new_blocks, this.shape, this.status);
+  }
+
+  endGame() {
+    gameOver = true; 
+    noLoop();
+    return false; 
   }
 
 }

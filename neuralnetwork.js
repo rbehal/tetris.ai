@@ -35,6 +35,30 @@ class NeuralNetwork {
     }
 }
 
+function createGeneration() {
+    var generation = []; 
+    var generationSize = 5; 
+
+    for (var i = 0; i < generationSize; i++) {
+        var genomeWeights = {
+            rowsCleared: Math.random() - 0.5, 
+            weightedHeight: Math.random() - 0.5,
+            cumulativeHeight: Math.random() - 0.5, 
+            relativeHeight: Math.random() - 0.5,
+            holes: Math.random() - 0.5,
+            roughness: Math.random() - 0.5
+        }
+        generation.push(genomeWeights);
+    }
+
+    return generation; 
+}
+
+
+
+
+
+
 var preMoveGameboard;
 var preMovePieces;
 var preMoveActiveShape;
@@ -65,7 +89,7 @@ function saveBoard() {
         level: level,
         lines_cleared: lines_cleared
     };
-    testMove = move; 
+  
     return move;
 }
 
@@ -99,7 +123,7 @@ function reset(move) {
  * Tests all possible moves and returns an array of them.
  * @return possibleMoves Array of of all possible moves .
  */
-function possibleMoves() {
+function getPossibleMoves() {
     var possibleMovesArr = []; 
     var startPosition = saveBoard(); // Saves very start position
 
@@ -110,7 +134,7 @@ function possibleMoves() {
             for (var j = 0; j < i; j++) { // Moves incrementally to the right (10 times til the end)
                 gameboard.moveRight();
             }
-            while(gameboard.moveDown()) { // Moves all the way down
+            while(gameboard.moveDown(true, true)) { // Moves all the way down
             }
             var currentState = saveBoard();
             currentState["rowsCleared"] = currentState.lines_cleared - startPosition.lines_cleared;
@@ -122,6 +146,34 @@ function possibleMoves() {
     }
 
     return possibleMovesArr; 
+}
+
+function getBestMove(possibleMovesArr, genome) {
+    var maxRating = -9999;
+    var bestMove; 
+    
+    for (let move = 0; move < possibleMovesArr.length; move++) {
+        var currMove = possibleMovesArr[move];
+        var kpis = getMoveKPIs(currMove); 
+        var rating = (kpis.rowsCleared * genome.rowsCleared) + (kpis.weightedHeight * genome.weightedHeight);
+        rating += (kpis.cumulativeHeight * genome.cumulativeHeight) + (kpis.relativeHeight * genome.relativeHeight);
+        rating += (kpis.holes * genome.holes) + (kpis.roughness * genome.roughness);
+
+        if (rating > maxRating) {
+            maxRating = rating; 
+            bestMove = currMove; 
+        }
+    }
+    
+    return bestMove; 
+}
+
+function makeBestMove() {
+    var possibleMoves = getPossibleMoves(); 
+    var genome = generation[0]; 
+    var bestMove = getBestMove(possibleMoves, genome); 
+
+    reset(bestMove);
 }
 
 /**
@@ -160,9 +212,6 @@ function copyPieces(pieces) {
     return newPieces;
 }
 
-/// Properties of a move ///
-
-
 function getFullLines(pieces) {
     let row_status = {}; // Object that holds the row indices as keys and the number of blocks in the row as an entry
     let full_lines = []; // Holds the indices of all of the full rows
@@ -181,11 +230,10 @@ function getFullLines(pieces) {
     return full_lines; 
 }
 
-function getMoveRating(move) {
-
+function getMoveKPIs(move) {
     var rowsCleared = getFullLines(move.pieces).length;
 
-    // Getting array of column heights to get other rating parameters
+    // Getting array of column heights to get other KPIs
     var columnHeights = []
     var holes = 0; 
     move.gameboard.forEach(function (column) {
@@ -225,7 +273,7 @@ function getMoveRating(move) {
         roughness += Math.abs(columnHeights[i] - columnHeights[i + 1]); 
     }
 
-    var rating = {   
+    var kpis = {   
         rowsCleared: rowsCleared, 
         weightedHeight: weightedHeight,
         cumulativeHeight: cumulativeHeight, 
@@ -234,5 +282,5 @@ function getMoveRating(move) {
         roughness: roughness
     };
 
-    return rating; 
+    return kpis; 
 }
