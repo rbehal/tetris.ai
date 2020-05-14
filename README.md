@@ -8,7 +8,7 @@ Demo after 13 generations:
 # Architecture
 
 ## Generations and Genomes
-tetris.ai uses a single layer perceptron model to judge the quality of a given move. The weights are stored in an object I'll refer to as a genome. The genetic algorithm begins by initializing a generation of size 50. This generation includes 50 genomes that have randomly initialized weights. The genomes play games 1 by 1 consecutively. When a game ends, the next genome in the generation begins a game until every genome in the generation has played one game. After the entire generation has finished, a new generation of 50 is produced through crossbreeding and mutation.
+tetris.ai uses a single layer perceptron model to judge the quality of a given move. The weights are stored in an object I'll refer to as a genome. The genetic algorithm begins by initializing a generation of size 50. This generation includes 50 genomes that have randomly initialized weights. The genomes play games 1 by 1 consecutively. When a game ends, the next genome in the generation begins a game until every genome in the generation has played one game. After the entire generation has finished, a new generation of 50 is produced through the crossbreeding and mutation of the highest performers from the last generation.
 
 ## Crossbreeding
 After the entire generation is finished, the top 10% of performing genomes (by score) are used as a pool of parents to create the next generation. There is a 50/50 chance that the child will have a given parent's gene, i.e one weight in the genome. 
