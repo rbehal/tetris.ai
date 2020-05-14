@@ -9,7 +9,7 @@ function createGeneration(sortedGenomes) {
     var generation = []; 
     var generationSize = 50; 
 
-    if (sortedGenomes === undefined) {
+    if (sortedGenomes === undefined) { // Initialization
         for (var i = 0; i < generationSize; i++) {
             var genomeWeights = {
                 rowsCleared: Math.random() - 0.5, 
@@ -22,12 +22,12 @@ function createGeneration(sortedGenomes) {
             generation.push(genomeWeights);
         }
     } else {
-        var mutationRate = 0.1;
+        var mutationRate = 0.1; // Degree of mutation
         var mutationProbability = 0.05;
         var geneticDiversity = 0.1;
 
-        function randomParent() {
-            return sortedGenomes[Math.floor(Math.random()*Math.floor(sortedGenomes.length*geneticDiversity))];
+        function randomParent() { // Returns random genome of the top X% wrt fitness where X is the geneticDiversity. 
+            return sortedGenomes[Math.floor(Math.random()*Math.floor(sortedGenomes.length*geneticDiversity))]; 
         }
 
         for (var i = 0; i < generationSize; i++) {
@@ -41,8 +41,8 @@ function createGeneration(sortedGenomes) {
                 roughness: baseGenome.roughness
             }
 
-            if (Math.random() < mutationProbability) {
-                genomeWeights.rowsCleared = baseGenome.rowsCleared + (((2*Math.random()) - 1) * mutationRate);
+            if (Math.random() < mutationProbability) { // base value + ((Random float from -1 to 1) * mutationRate)
+                genomeWeights.rowsCleared = baseGenome.rowsCleared + (((2*Math.random()) - 1) * mutationRate); 
             } 
             if (Math.random() < mutationProbability) {
                 genomeWeights.weightedHeight = baseGenome.weightedHeight + (((2*Math.random()) - 1) * mutationRate);
@@ -67,11 +67,20 @@ function createGeneration(sortedGenomes) {
     return generation; 
 }
 
+/**
+ * "Kills" a genome which does a few things:
+ *  1) Sets up the next genome.
+ *  2) Resets the board and starts game.
+ * OR
+ *  1) Ends generation.
+ *  2) Creates next generation and starts game.
+ */
 function terminateGenome() {
     currGenome['fitness'] = score; 
     if (currGeneration.length != 0) {
         currGenerationDeaths.push(currGenome); 
         currGenome = currGeneration.pop(); 
+
         gameOver = false; 
         reset(startBoard);
         spawnShape(true);
@@ -83,7 +92,7 @@ function terminateGenome() {
             var sortedArr = []; 
             while (arr1.length != 0 && arr2.length != 0) {
                 if (arr1[0].fitness > arr2[0].fitness) {
-                    if ((arr1[0].fitness) > bestGenome.fitness) {
+                    if ((arr1[0].fitness) > bestGenome.fitness) { // Highest to lowest sorting
                         bestGenome = arr1[0]; 
                     }
                     sortedArr.push(arr1.shift());                   
@@ -107,8 +116,10 @@ function terminateGenome() {
                 var mid = Math.floor((array.length)/2); 
                 var arr1 = array.slice(0, mid);
                 var arr2 = array.slice(mid, array.length);
+
                 arr1 = mergeSort(arr1);
                 arr2 = mergeSort(arr2); 
+
                 return (merge(arr1, arr2));
             }
         }
@@ -116,12 +127,17 @@ function terminateGenome() {
         var sortedGenomes = mergeSort(currGenerationDeaths);
 
         currGenerationDeaths = [];
-
         gameOver = false; 
+
         currGeneration = createGeneration(sortedGenomes);
     }
 }
 
+/**
+ * Produces child genome from two parent genomes whose weights are a mix of the parents.
+ * @param {Array} parents Array of two genomes.
+ * @returns {genome} Genome made approx. 50/50 of each of the genomes in the inputted array.
+ */
 function crossBreed(parents) {
     var randomParent = function () {
         return parents[Math.floor(Math.random() * 2)]; 

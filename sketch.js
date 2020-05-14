@@ -1,12 +1,11 @@
 var gameboard; // Holds the one and only gameboard object for the game.
 var activeShape; // The current activeShape (falling shape on the board)
 var lockDelay = null; // lockDelay object is stored in this variable when piece is on the ground
-var block_sz = 32;
+var block_sz = 32; // pixel sidelength of one block
 var score = 0;
 var seconds = 0;
 var frames = 0;
 var rand_shapes = []; // Array of integers that correspond to random shapes. See randomShape() for more info.
-var keydown = 0;
 var timer = 0;
 var lines_cleared = 0;
 var level = 0;
@@ -37,14 +36,14 @@ var Box_img;
 
 var hold = [null, null, null]; // hold[0] represents the image object in hold. hold[1] represents the # corresponding the shape. hold[2] checks for double shifting.
 
-var startBoard;
+var startBoard; // Points to the start position of the board as a move object
 var generationNum = 0;
-var allGenerations = {};
+var allGenerations = {}; // Used to hold all genomes -- For Testing
 var currGeneration = [];
 var currGenome = null; 
-var currGenerationDeaths = [];
-var bestGenome = {fitness: 1};
-var geneticAlgCB; 
+var currGenerationDeaths = []; // Array of genomes after they've "died"
+var bestGenome = {fitness: 1}; // Best genome of the generation 
+var geneticAlgCB; // Checkbox 
 
 
 
@@ -76,15 +75,15 @@ function setup() {
   currGenome = currGeneration.pop(); 
 
   frameRate(30); 
+
   displayCheckbox();
-  textFont('nucleo-mini', 16);
 }
 
 /**
  * Draw function runs 60 times per seconds. Serves to render and animate everything on the screen.
  */
 function draw() {
-  for (var i = 0; i < (2 - geneticAlgCB.checked()); i++) { // When GA is running - 30 FPS, when manual play - 60 FPS
+  for (var i = 0; i < (2 - geneticAlgCB.checked()); i++) { // When genetic alg. is running: 30 FPS. When manual play: 60 FPS
     clear(); 
     // Displays gameboard background.
     imageMode(CORNER);
@@ -135,7 +134,7 @@ function mouseClicked() { // For testing
  */
 function keyPressed() {
   if (keyCode === LEFT_ARROW) {
-    lKey = setInterval(function() {gameboard.moveLeft();}, 75); // Runs moveLeft ever 75 ms.
+    lKey = setInterval(function() {gameboard.moveLeft();}, 75); // Runs moveLeft every 75 ms.
     return false;
   }
   if (keyCode === RIGHT_ARROW) {
@@ -150,29 +149,23 @@ function keyPressed() {
     gameboard.rotate();
     return false;
   }
-  if (keyCode == 32) { // ASCII for spacebar
-    let swtch = true;
-    while (swtch) {
-      swtch = gameboard.moveDown(true, addScore = true); // Moves down until it can't anymore
+  if (keyCode == 32) { // Spacebar
+    let notAtBottom = true;
+    while (notAtBottom) {
+      notAtBottom = gameboard.moveDown(true, addScore = true); // Moves down until it can't anymore
     }
   }
-  if (keyCode == 16) { // ASCII for shift
+  if (keyCode == 16) { // Shift
     gameboard.hold();
   }
-  // if (keyCode == 83) { // ASCII for s
-  //   saveBoard();
-  // }
-  // if (keyCode == 82) { // ASCII for r
-  //   reset();
-  // }
 }
 
 /**
  * Runs any time a key is released.
  */
-function keyReleased() {
+function keyReleased() { // Stops moving Left/Right/Down
   if (keyCode === LEFT_ARROW) {
-    clearInterval(lKey);
+    clearInterval(lKey); 
   }
   if (keyCode === RIGHT_ARROW) {
     clearInterval(rKey);
@@ -348,5 +341,6 @@ function displayCheckbox() {
   geneticAlgCB.style('color','#FFFFFF');
   geneticAlgCB.position(1100,200); 
   geneticAlgCB.changed(makeBestMove); 
+  textFont('nucleo-mini', 16);
 }
 

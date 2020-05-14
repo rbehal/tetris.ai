@@ -34,6 +34,7 @@ class Gameboard {
         for (var i = 0; i < shape.blocks.length; i++) {
             let curr_block = shape.blocks[i];
     
+            // Needs to translate block_sz - 0.30 as the size of the grid is slightly smaller
             curr_block.x = curr_block.position[0] * (block_sz - 0.30) + this.initial[0];
             curr_block.y = curr_block.position[1] * (block_sz - 0.30) + this.initial[1];
 
@@ -494,6 +495,7 @@ class Gameboard {
 
                         // Updating block object with new position
                         curr_block.position = [j, i + change];
+                        // Needs to translate block_sz - 0.30 as the size of the grid is slightly smaller
                         curr_block.x = curr_block.position[0] * (block_sz - 0.30) + this.initial[0];
                         curr_block.y = curr_block.position[1] * (block_sz - 0.30) + this.initial[1];
                                         
@@ -734,7 +736,7 @@ class Gameboard {
             frames = 0; 
         }
 
-        level = Math.floor(lines_cleared/10) + 1;
+        level = Math.floor(lines_cleared/10) + 1; // Level up once every 10 lines
         return level;
     }
 
