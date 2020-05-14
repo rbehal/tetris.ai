@@ -21,9 +21,9 @@ The features are key indicators that were selected after careful research and tr
 
 # References 
 
-..*[UTexas MM-NEAT](http://nn.cs.utexas.edu/?mm-neat)
-..*[Evolution of AI in Tetris Play Using Raw Screen Inputs](https://people.southwestern.edu/~schrum2/SCOPE/SCOPE-Poster-Tetris.pdf)
-..*[Playing Tetris with Genetic Algorithms](http://cs229.stanford.edu/proj2015/238_poster.pdf)
-..*[TetNet](https://idreesinc.com/about-tetnet.html)
+- [UTexas MM-NEAT](http://nn.cs.utexas.edu/?mm-neat)
+- [Evolution of AI in Tetris Play Using Raw Screen Inputs](https://people.southwestern.edu/~schrum2/SCOPE/SCOPE-Poster-Tetris.pdf)
+- [Playing Tetris with Genetic Algorithms](http://cs229.stanford.edu/proj2015/238_poster.pdf)
+- [TetNet](https://idreesinc.com/about-tetnet.html)
 
 
