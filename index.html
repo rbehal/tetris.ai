@@ -12,7 +12,28 @@
     <script src="gameboard.js"></script>
     <script src="shapes.js"></script>
     <script src="block.js"></script>
-    <script src="lockDelay.js"></script>
     <script src="rotation.js"></script>
+    <script src="geneticAlgorithm.js"></script>
   </body>
+
+  <script>
+    // Prevents scrolling up and down through the arrow keys
+    var keys = {};
+    window.addEventListener("keydown",
+        function(e){
+            keys[e.keyCode] = true;
+            switch(e.keyCode){
+                case 37: case 39: case 38:  case 40: // Arrow keys
+                case 32: e.preventDefault(); break; // Space
+                default: break; // do not block other keys
+            }
+        },
+    false);
+    window.addEventListener('keyup',
+        function(e){
+            keys[e.keyCode] = false;
+        },
+    false);
+  </script>
+
 </html>

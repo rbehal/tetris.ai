@@ -2,7 +2,14 @@ html, body {
     margin: 0;
     padding: 0;
   }
-  canvas {
-    display: block;
-  }
-  
+body {
+  margin: 0;
+  display: flex;
+  /* This centers horizontally. */
+  justify-content: center;
+  /* This centers vertically. */
+  align-items: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-image: url("assets/background.jpg");
+}

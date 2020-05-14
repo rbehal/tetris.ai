@@ -44,9 +44,7 @@ function tRotation() {
 }
 
 function jRotation() {
-
     let proposed_blocks = gameboard.activeShape.copyBlocks();
-
     if (gameboard.activeShape.status == 0) {
         proposed_blocks[0].position = [proposed_blocks[0].position[0] + 1, proposed_blocks[0].position[1] - 1];
         proposed_blocks[2].position = [proposed_blocks[2].position[0] - 2, proposed_blocks[2].position[1]];
