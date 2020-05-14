@@ -3,13 +3,13 @@
  * @param {Array} parents Array containing genome weights. W
  * @returns {Array} Generation array containing the genome weights. 
  */
-function createGeneration(parents) {
+function createGeneration(sortedGenomes) {
     generationNum++; 
 
     var generation = []; 
-    var generationSize = 10; 
+    var generationSize = 50; 
 
-    if (parents === undefined) {
+    if (sortedGenomes === undefined) {
         for (var i = 0; i < generationSize; i++) {
             var genomeWeights = {
                 rowsCleared: Math.random() - 0.5, 
@@ -22,12 +22,16 @@ function createGeneration(parents) {
             generation.push(genomeWeights);
         }
     } else {
-        var mutationRate = 0.2;
+        var mutationRate = 0.1;
         var mutationProbability = 0.05;
+        var geneticDiversity = 0.1;
 
-        var baseGenome = crossBreed(parents); 
+        function randomParent() {
+            return sortedGenomes[Math.floor(Math.random()*Math.floor(sortedGenomes.length*geneticDiversity))];
+        }
 
         for (var i = 0; i < generationSize; i++) {
+            var baseGenome = crossBreed([randomParent(), randomParent()]); 
             var genomeWeights = {
                 rowsCleared: baseGenome.rowsCleared, 
                 weightedHeight: baseGenome.weightedHeight,
@@ -70,27 +74,51 @@ function terminateGenome() {
         currGenome = currGeneration.pop(); 
         gameOver = false; 
         reset(startBoard);
-        spawnShape(isRandom = true);
+        spawnShape(true);
     } else {
         currGenerationDeaths.push(currGenome); 
 
-        currGenerationDeaths.forEach (genome => {
-            if (genome.fitness > secondBestGenome.fitness) {
-                if (genome.fitness > bestGenome.fitness) {
-                    if (secondBestGenome != bestGenome) {
-                        secondBestGenome = bestGenome;
-                    } 
-                    bestGenome = genome; 
+        // Merge sort used to sort by fitness -- parents are sampled from the top tier
+        function merge(arr1, arr2) { // arr1 and arr2 are two sorted arrays
+            var sortedArr = []; 
+            while (arr1.length != 0 && arr2.length != 0) {
+                if (arr1[0].fitness > arr2[0].fitness) {
+                    if ((arr1[0].fitness) > bestGenome.fitness) {
+                        bestGenome = arr1[0]; 
+                    }
+                    sortedArr.push(arr1.shift());                   
                 } else {
-                    secondBestGenome = genome;
+                    sortedArr.push(arr2.shift());
                 }
             }
-        });
+            while (arr1.length != 0) {
+                sortedArr.push(arr1.shift());
+            }
+            while (arr2.length != 0) {
+                sortedArr.push(arr2.shift());
+            }
+            return sortedArr;
+        }
+
+        function mergeSort(array) {
+            if (array.length == 1) {
+                return array;
+            } else {
+                var mid = Math.floor((array.length)/2); 
+                var arr1 = array.slice(0, mid);
+                var arr2 = array.slice(mid, array.length);
+                arr1 = mergeSort(arr1);
+                arr2 = mergeSort(arr2); 
+                return (merge(arr1, arr2));
+            }
+        }
+
+        var sortedGenomes = mergeSort(currGenerationDeaths);
 
         currGenerationDeaths = [];
 
         gameOver = false; 
-        currGeneration = createGeneration([bestGenome, secondBestGenome]);
+        currGeneration = createGeneration(sortedGenomes);
     }
 }
 
@@ -110,32 +138,13 @@ function crossBreed(parents) {
 }
 
 
-
-// FIXME: Can refactor this later, they don't need to be global variables and you take the extra case for this out in reset() too. 
-var preMoveGameboard;
-var preMovePieces;
-var preMoveActiveShape;
-var preMoveRandShapes;
-var preMoveLevel;
-var preMoveScore;
-var preMoveLinesCleared;
-var testMove; 
-
 /**
  * Saves current state of the board in an object and returns that object.
  */
 function saveBoard() {
-    preMoveGameboard = copyGameboard(gameboard.gameboard);
-    preMovePieces = copyPieces(gameboard.pieces);
-    preMoveActiveShape = gameboard.activeShape.copy();
-    preMoveRandShapes = Array.from(rand_shapes);
-    preMoveScore = score;
-    preMoveLevel = level;
-    preMoveLinesCleared = lines_cleared;
-
     var move = {   
         gameboard: copyGameboard(gameboard.gameboard), 
-        pieces: copyPieces(preMovePieces),
+        pieces: copyPieces(gameboard.pieces),
         activeShape: gameboard.activeShape.copy(), 
         rand_shapes: Array.from(rand_shapes),
         score: score,
@@ -151,23 +160,13 @@ function saveBoard() {
  * @param move Formerly saved game state returned with saveBoard().
  */
 function reset(move) {
-    if (move === undefined) {
-        gameboard.gameboard = copyGameboard(preMoveGameboard);
-        gameboard.pieces = copyPieces(preMovePieces);
-        gameboard.activeShape = preMoveActiveShape.copy();
-        rand_shapes = Array.from(preMoveRandShapes);
-        score = preMoveScore;
-        level = preMoveLevel;
-        lines_cleared = preMoveLinesCleared;
-    } else {
-        gameboard.gameboard = copyGameboard(move.gameboard);
-        gameboard.pieces = copyPieces(move.pieces);
-        gameboard.activeShape = move.activeShape.copy();
-        rand_shapes = Array.from(move.rand_shapes);
-        score = move.score;
-        level = move.level;
-        lines_cleared = move.lines_cleared;
-    }
+    gameboard.gameboard = copyGameboard(move.gameboard);
+    gameboard.pieces = copyPieces(move.pieces);
+    gameboard.activeShape = move.activeShape.copy();
+    rand_shapes = Array.from(move.rand_shapes);
+    score = move.score;
+    level = move.level;
+    lines_cleared = move.lines_cleared;
     loop();
 }
 
@@ -231,10 +230,18 @@ function getBestMove(possibleMovesArr, genome) {
  * @param {genomeWeights} genome Object containing the weights.
  */
 function makeBestMove(genome) {
-    var possibleMoves = getPossibleMoves(); 
-    var bestMove = getBestMove(possibleMoves, genome); 
+    if (geneticAlgCB.checked()) {
+        if (genome.rowsCleared === undefined) { // Checking if it was called from ticking the checkbox
+            genome = currGenome;
+        }
 
-    reset(bestMove);
+        var possibleMoves = getPossibleMoves(); 
+        var bestMove = getBestMove(possibleMoves, genome); 
+
+        reset(bestMove);
+    } else {
+        terminateGenome();
+    }
 }
 
 /**
@@ -309,16 +316,16 @@ function getMoveKPIs(move) {
         var colHeight = 0;
         var blockAbove = false;
 
-        for (var yIndex = 0; yIndex < 20; yIndex++) {
-            if (column[yIndex] != null && blockAbove === false) {
-                colHeight = yIndex;
+        for (var row = 0; row < 20; row++) {
+            if (column[row] != null && blockAbove === false) {
+                colHeight = row;
                 blockAbove = true; 
-            } else if (column[yIndex] === null && blockAbove === true) {
+            } else if (column[row] === null && blockAbove === true) {
                 holes++; 
             }
         }
 
-        columnHeights.push(colHeight);
+        columnHeights.push(20 - colHeight);
     });
 
     // Getting weighted height
@@ -342,10 +349,10 @@ function getMoveKPIs(move) {
         roughness += Math.abs(columnHeights[i] - columnHeights[i + 1]); 
     }
 
-    var kpis = {   
-        rowsCleared: rowsCleared, 
+    var kpis = {
+        rowsCleared: rowsCleared,
         weightedHeight: weightedHeight,
-        cumulativeHeight: cumulativeHeight, 
+        cumulativeHeight: cumulativeHeight,
         relativeHeight: relativeHeight,
         holes: holes,
         roughness: roughness

@@ -4,7 +4,7 @@ class Gameboard {
         this.gameboard_img = loadImage('assets/TetrisBoard.png'); // Tetris gameboard
 
         // x and y of the top left corner of the top left corner of the grid
-        this.initial = [145, 73];
+        this.initial = [145, 75];
 
         // Initializing gameboard array of null values
         this.gameboard = [];
@@ -34,8 +34,8 @@ class Gameboard {
         for (var i = 0; i < shape.blocks.length; i++) {
             let curr_block = shape.blocks[i];
     
-            curr_block.x = curr_block.position[0] * 32 + this.initial[0];
-            curr_block.y = curr_block.position[1] * 32 + this.initial[1];
+            curr_block.x = curr_block.position[0] * (block_sz - 0.30) + this.initial[0];
+            curr_block.y = curr_block.position[1] * (block_sz - 0.30) + this.initial[1];
 
             // Updating gameboard, pieces array, and activeShape attribute
             this.gameboard[curr_block.position[0]][curr_block.position[1]] = curr_block;
@@ -494,8 +494,8 @@ class Gameboard {
 
                         // Updating block object with new position
                         curr_block.position = [j, i + change];
-                        curr_block.x = curr_block.position[0] * 32 + this.initial[0];
-                        curr_block.y = curr_block.position[1] * 32 + this.initial[1];
+                        curr_block.x = curr_block.position[0] * (block_sz - 0.30) + this.initial[0];
+                        curr_block.y = curr_block.position[1] * (block_sz - 0.30) + this.initial[1];
                                         
                         // Updating new position in the pieces array and the gameboard
                         this.pieces.push([curr_block.position[0], curr_block.position[1]]);
@@ -569,11 +569,11 @@ class Gameboard {
 
         imageMode(CENTER);
         // Constant resizing causes blurriness
-        image(next_shapes[0], 560, 160);
-        image(next_shapes[1], 560, 280);
-        image(next_shapes[2], 560, 377);
-        image(next_shapes[3], 560, 470);
-        image(next_shapes[4], 560, 560);     
+        image(next_shapes[0], 553, 157);
+        image(next_shapes[1], 553, 278);
+        image(next_shapes[2], 553, 375);
+        image(next_shapes[3], 553, 466);
+        image(next_shapes[4], 553, 557);     
     }
 
     /**

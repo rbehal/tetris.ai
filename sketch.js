@@ -1,6 +1,7 @@
 var gameboard; // Holds the one and only gameboard object for the game.
 var activeShape; // The current activeShape (falling shape on the board)
 var lockDelay = null; // lockDelay object is stored in this variable when piece is on the ground
+var block_sz = 32;
 var score = 0;
 var seconds = 0;
 var frames = 0;
@@ -43,7 +44,7 @@ var currGeneration = [];
 var currGenome = null; 
 var currGenerationDeaths = [];
 var bestGenome = {fitness: 1};
-var secondBestGenome = {fitness: 0};
+var geneticAlgCB; 
 
 
 
@@ -53,7 +54,7 @@ var secondBestGenome = {fitness: 0};
 function setup() {
   preloadImages();
 
-  createCanvas(650, 750);
+  createCanvas(625, 750);
 
   gameboard = new Gameboard();
 
@@ -74,62 +75,59 @@ function setup() {
   currGeneration = createGeneration(); 
   currGenome = currGeneration.pop(); 
 
-  // frameRate(30); 
+  frameRate(30); 
+  displayCheckbox();
+  textFont('nucleo-mini', 16);
 }
 
 /**
  * Draw function runs 60 times per seconds. Serves to render and animate everything on the screen.
  */
 function draw() {
+  for (var i = 0; i < (2 - geneticAlgCB.checked()); i++) { // When GA is running - 30 FPS, when manual play - 60 FPS
+    clear(); 
+    // Displays gameboard background.
+    imageMode(CORNER);
+    image(gameboard.gameboard_img, 20, 20); 
 
-  background(255);
-  // Displays gameboard background.
-  imageMode(CORNER);
-  image(gameboard.gameboard_img, 20, 20); 
+    gameboard.displayNext(); // Displays all of the pieces coming up next.
 
-  gameboard.displayNext(); // Displays all of the pieces coming up next.
+    // Displays the hold image.
+    if (hold[0] != null) {
+      image(hold[0], 75, 160); 
+    }
 
-  // Displays the hold image.
-  if (hold[0] != null) {
-    image(hold[0], 75, 160); 
+    // Generates new random shape if there is none on the board.
+    if (gameboard.activeShape.shape == false) { 
+      spawnShape(false);
+    }
+
+    gameboard.display(); // Renders every active block on the grid.
+
+    // Timer
+    timer++;
+    if (timer == 60) {
+      seconds++;
+      timer = 0;
+    }
+    fill(255);
+    text(seconds.toString(), width / 2 - 5, 57); 
+
+    // Lock delay 
+    if (lockDelay != null) {
+      lockDelay.time--; 
+    }
+
+    // calculateLevel() moves active piece down (speed based on level) and returns level #
+    text("Level: " + gameboard.calculateLevel().toString(), 0, 300);
+    text("Score: " + score.toString(), 0, 350);
+    if (geneticAlgCB.checked()) { text("Generation: " + generationNum.toString(), 0, 400);} 
   }
-
-  // Generates new random shape if there is none on the board.
-  if (gameboard.activeShape.shape == false) { 
-    spawnShape(rand_shapes);
-  }
-
-  gameboard.display(); // Renders every active block on the grid.
-
-  // Timer
-  timer++;
-  if (timer == 60) {
-    seconds++;
-    timer = 0;
-  }
-  fill(255);
-  text(seconds.toString(), width / 2 - 5, 60); 
-
-  // Lock delay 
-  if (lockDelay != null) {
-    lockDelay.time--; 
-  }
-
-  // calculateLevel() moves active piece down (speed based on level) and returns level #
-  fill(0);
-  text("Level: " + gameboard.calculateLevel().toString(), 0, 300);
-  text("Score: " + score.toString(), 0, 350);
-  text("Generation " + generationNum.toString(), 0, 400);
 }
 /**
  * Runs once when the mouse is clicked.
  */
 function mouseClicked() { // For testing
-  // console.log(gameboard.gameboard)
-  // noLoop();
-  // console.log(bestGenome);
-  // console.log(secondBestGenome);
-
 }
 
 /**
@@ -161,18 +159,12 @@ function keyPressed() {
   if (keyCode == 16) { // ASCII for shift
     gameboard.hold();
   }
-  if (keyCode == 83) { // ASCII for s
-    saveBoard();
-  }
-  if (keyCode == 82) { // ASCII for r
-    reset();
-  }
-  if (keyCode == 78) { // ASCII for n
-    noLoop();
-  }
-  if (keyCode == 76) { // ASCII for n
-    loop();
-  }
+  // if (keyCode == 83) { // ASCII for s
+  //   saveBoard();
+  // }
+  // if (keyCode == 82) { // ASCII for r
+  //   reset();
+  // }
 }
 
 /**
@@ -190,23 +182,6 @@ function keyReleased() {
   }
 }
 
-// Prevents scrolling up and down through the arrow keys
-var keys = {};
-window.addEventListener("keydown",
-    function(e){
-        keys[e.keyCode] = true;
-        switch(e.keyCode){
-            case 37: case 39: case 38:  case 40: // Arrow keys
-            case 32: e.preventDefault(); break; // Space
-            default: break; // do not block other keys
-        }
-    },
-false);
-window.addEventListener('keyup',
-    function(e){
-        keys[e.keyCode] = false;
-    },
-false);
 
 /**
  * Returns a number that is a random roll of the die from 0 to 7 where 0 to 6 correspond to a shape and 7 is a reroll. 
@@ -242,12 +217,12 @@ function randomShape(rand_shape) {
   } else if (rand_shape == 6) {
     activeShape.spawnLine();
   } 
-  if (!gameOver) {
+  if (!gameOver && geneticAlgCB.checked()) {
     makeBestMove(currGenome);
   } 
 }
 
-function spawnShape(isRandom = false) {
+function spawnShape(isRandom) {
   if (isRandom) {
     rand_shapes = []; 
     for (let i = 0; i < 5; i++) {
@@ -263,25 +238,25 @@ function spawnShape(isRandom = false) {
  */
 function preloadImages() {
   darkblue_sq = loadImage("assets/darkblue_sq.png", img => {
-    img.resize(32, 32);
+    img.resize(block_sz, block_sz);
   });
   green_sq = loadImage("assets/green_sq.png", img => {
-    img.resize(32, 32);
+    img.resize(block_sz, block_sz);
   });
   lightblue_sq = loadImage("assets/lightblue_sq.png", img => {
-    img.resize(32, 32);
+    img.resize(block_sz, block_sz);
   });
   orange_sq = loadImage("assets/orange_sq.png", img => {
-    img.resize(32, 32);
+    img.resize(block_sz, block_sz);
   });
   pink_sq = loadImage("assets/pink_sq.png", img => {
-    img.resize(32, 32);
+    img.resize(block_sz, block_sz);
   });
   purple_sq = loadImage("assets/purple_sq.png", img => {
-    img.resize(32, 32);
+    img.resize(block_sz, block_sz);
   });
   yellow_sq = loadImage("assets/yellow_sq.png", img => {
-    img.resize(32, 32);
+    img.resize(block_sz, block_sz);
   });
 
   T_img = loadImage("assets/T_piece.png");
@@ -364,5 +339,14 @@ function preloadImages() {
   });
 }
 
-
+function displayCheckbox() {
+  //Creating,styling,positioning checkbox
+  loadFont("assets/tetrisFont.ttf");
+  geneticAlgCB = createCheckbox('Let a genetic algorithm play!',false);
+  geneticAlgCB.style('font-size','20px');
+  geneticAlgCB.style('font-family','nucleo-mini');
+  geneticAlgCB.style('color','#FFFFFF');
+  geneticAlgCB.position(1100,200); 
+  geneticAlgCB.changed(makeBestMove); 
+}
 
