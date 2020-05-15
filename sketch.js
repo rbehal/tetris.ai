@@ -117,8 +117,10 @@ function draw() {
       lockDelay.time--; 
     }
 
-    // calculateLevel() moves active piece down (speed based on level) and returns level #
-    text("Level: " + gameboard.calculateLevel().toString(), 0, 300);
+    gameboard.calculateLevel(); // calculateLevel() moves active piece down (speed based on level) and returns level #
+    
+    // text("Level: " + gameboard.calculateLevel().toString(), 0, 300);
+    text("Lines Cleared: " + lines_cleared.toString(), 0, 300);
     text("Score: " + score.toString(), 0, 350);
     if (geneticAlgCB.checked()) { text("Generation: " + generationNum.toString(), 0, 400);} 
   }
