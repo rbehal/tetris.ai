@@ -1,9 +1,9 @@
 # tetris.ai
 Genetic algorithm to play and master a Tetris clone: https://rbehal.github.io/tetris.ai/
 
-Demo after 13 generations:
+Demo after 8 generations:
 
-![Demo after 13 generations:](https://media.giphy.com/media/XfautQQW6oQgO27RGh/giphy.gif)
+![Demo after 8 generations:](https://media.giphy.com/media/QXPWff3shCkTgh6DKM/giphy.gif)
 
 # Architecture
 
