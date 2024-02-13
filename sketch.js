@@ -46,7 +46,6 @@ var bestGenome = {fitness: 1}; // Best genome of the generation
 var geneticAlgCB; // Checkbox 
 
 
-
 /**
  * Setup function runs once when the page is loaded. Loads images, creates canvas and gameboard, and chooses the first few shapes.
  */
@@ -77,6 +76,9 @@ function setup() {
   frameRate(30); 
 
   displayCheckbox();
+
+  // Start playing the Tetris theme music
+  music.loop();
 }
 
 /**
@@ -159,6 +161,26 @@ function keyPressed() {
   }
   if (keyCode == 16) { // Shift
     gameboard.hold();
+  }
+  // Toggle music on 'M' key press
+  if (keyCode === 77) {
+    if (music.isPlaying()) {
+      music.pause();
+    } else {
+      music.loop();
+    }
+  }
+
+  // Increase volume with '+' key
+  if (keyCode === 187) {
+    let vol = music.getVolume();
+    music.setVolume(constrain(vol + 0.1, 0, 1));
+  }
+
+  // Decrease volume with '-' key
+  if (keyCode === 189) {
+    let vol = music.getVolume();
+    music.setVolume(constrain(vol - 0.1, 0, 1));
   }
 }
 
@@ -345,4 +367,3 @@ function displayCheckbox() {
   geneticAlgCB.changed(makeBestMove); 
   textFont('nucleo-mini', 16);
 }
-
